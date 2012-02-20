@@ -192,18 +192,9 @@
     can be found.
   -->
   <ItemGroup>
-    <Compile Include="GithubRibbon.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GithubRibbon.Designer.cs">
-      <DependentUpon>GithubRibbon.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <EmbeddedResource Include="GithubRibbon.resx">
-      <DependentUpon>GithubRibbon.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -235,10 +226,6 @@
       <DependentUpon>GitHubForOutlookAddIn.Designer.xml</DependentUpon>
     </Compile>
     <AppDesigner Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\github_logo_social_coding_outlined.png" />
-    <None Include="Resources\octocat.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GithubForOutlook.Core\GithubForOutlook.Core.csproj">
