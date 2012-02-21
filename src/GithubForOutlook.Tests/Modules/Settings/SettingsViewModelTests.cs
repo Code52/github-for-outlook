@@ -1,28 +1,25 @@
-﻿using GithubForOutlook.Logic.Models;
+﻿using System;
+using GithubForOutlook.Logic.Models;
 using GithubForOutlook.Logic.Modules.Settings;
+using NGitHub;
 using NGitHub.Authentication;
+using NGitHub.Services;
 using NSubstitute;
+using NSubstitute.Core;
 using Xunit;
 
 namespace GithubForOutlook.Tests.Modules.Settings
 {
     public class SettingsViewModelTests
     {
-        SettingsViewModel viewModel;
-        IGitHubOAuthAuthorizer authorizer = Substitute.For<IGitHubOAuthAuthorizer>();
+        readonly SettingsViewModel viewModel;
+        readonly IGitHubOAuthAuthorizer authorizer = Substitute.For<IGitHubOAuthAuthorizer>();
+        readonly IGitHubClient client = Substitute.For<IGitHubClient>();
 
         public SettingsViewModelTests()
         {
-            viewModel = new SettingsViewModel(authorizer);
-        }
-
-        [Fact]
-        public void SignIn_WithSomeBackendService_SetsTheUser()
-        {
-            // act 
-            viewModel.SignIn();
-
-            Assert.NotNull(viewModel.User);
+            client.Users.Returns(Substitute.For<IUserService>());
+            viewModel = new SettingsViewModel(authorizer, client);
         }
 
         [Fact]
@@ -31,6 +28,36 @@ namespace GithubForOutlook.Tests.Modules.Settings
             // act
             viewModel.SignIn();
             authorizer.ReceivedWithAnyArgs().GetAccessTokenAsync(null, null, null, null, null);
+        }
+
+        [Fact]
+        public void SignIn_WhenCallbackInvoked_SetsTheUser()
+        {
+            const string someValue = "1234";
+            SetAuthResponse(c => ExecuteSuccessCallback(c, someValue));
+            SetClientResponse(c => ReturnUser(c, "shiftkey", "foo"));
+
+            // act
+            viewModel.SignIn();
+            Assert.NotNull(viewModel.User);
+        }
+
+        [Fact]
+        public void SignIn_WhenErrorInvoked_DoesNotSetsTheUser()
+        {
+            SetAuthResponse(ExecuteErrorCallback);
+
+            // act
+            viewModel.SignIn();
+            Assert.Null(viewModel.User);
+        }
+
+        [Fact]
+        public void SignIn_WhenNoCallbackInvoked_DoesNotSetsTheUser()
+        {
+            // act
+            viewModel.SignIn();
+            Assert.Null(viewModel.User);
         }
 
         [Fact]
@@ -43,6 +70,41 @@ namespace GithubForOutlook.Tests.Modules.Settings
             viewModel.Clear();
 
             Assert.Null(viewModel.User);
+        }
+
+        private static void ReturnUser(CallInfo callInfo, string name, string avatarUrl)
+        {
+            var callback = callInfo[0] as Action<NGitHub.Models.User>;
+            if (callback != null) callback(new NGitHub.Models.User { AvatarUrl = avatarUrl, Name = name });
+        }
+
+        private static void ExecuteErrorCallback(CallInfo callInfo)
+        {
+            var callback = callInfo[4] as Action<GitHubException>;
+            if (callback != null) callback(null);
+        }
+
+        private static void ExecuteSuccessCallback(CallInfo callInfo, string someValue)
+        {
+            var callback = callInfo[3] as Action<string>;
+            if (callback != null) callback(someValue);
+        }
+
+        private void SetAuthResponse(Action<CallInfo> callback)
+        {
+            authorizer.When(
+                a =>
+                a.GetAccessTokenAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Action<string>>(),
+                                      Arg.Any<Action<GitHubException>>()))
+                .Do(callback);
+        }
+
+        private void SetClientResponse(Action<CallInfo> callback)
+        {
+            client.Users.When(
+                a =>
+                a.GetAuthenticatedUserAsync(Arg.Any<Action<NGitHub.Models.User>>(), Arg.Any<Action<GitHubException>>()))
+                .Do(callback);
         }
     }
 }

@@ -2,17 +2,22 @@
 using GithubForOutlook.Logic.Models;
 using NGitHub;
 using NGitHub.Authentication;
+using RestSharp;
 using VSTOContrib.Core.Wpf;
 
 namespace GithubForOutlook.Logic.Modules.Settings
 {
+    // TODO: is there a "Loaded" event in VSTOContrib to mimic the Activate/Deactivate hooks inside CM?
+
     public class SettingsViewModel : OfficeViewModelBase
     {
         private readonly IGitHubOAuthAuthorizer authorizer;
+        private readonly IGitHubClient client;
 
-        public SettingsViewModel(IGitHubOAuthAuthorizer authorizer)
+        public SettingsViewModel(IGitHubOAuthAuthorizer authorizer, IGitHubClient client)
         {
             this.authorizer = authorizer;
+            this.client = client;
         }
 
         private bool trackIssues;
@@ -52,25 +57,34 @@ namespace GithubForOutlook.Logic.Modules.Settings
 
         public void SignIn()
         {
-            authorizer.GetAccessTokenAsync("clientId", "clientSecret", "", OnCompleted, OnError);
-             
-            // TODO: actually implement this logic
             // TODO: settings provider
-            User = new User
-                       {
-                           Name = "shiftkey",
-                           Icon = "https://secure.gravatar.com/avatar/bcd3cc17a673e125b5c8bd7000829326?s=140"
-                       };
+            authorizer.GetAccessTokenAsync("clientId", "clientSecret", "", OnCompleted, OnError);
         }
 
         private void OnError(GitHubException obj)
         {
-            
+
         }
 
         private void OnCompleted(string obj)
         {
-            
+            // TODO: save token to settings
+            client.Authenticator = new OAuth2UriQueryParameterAuthenticator(obj);
+            client.Users.GetAuthenticatedUserAsync(MapUser, LogError);
+        }
+
+        private void LogError(GitHubException obj)
+        {
+
+        }
+
+        private void MapUser(NGitHub.Models.User obj)
+        {
+            User = new User
+            {
+                Name = obj.Name,
+                Icon = obj.AvatarUrl
+            };
         }
 
         public ICommand ClearCommand { get { return new DelegateCommand(Clear); } }
