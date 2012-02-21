@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("GithubForOutlook.Tests")]
+[assembly: AssemblyTitle("GithubForOutlook.Logic")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GithubForOutlook.Tests")]
+[assembly: AssemblyProduct("GithubForOutlook.Logic")]
 [assembly: AssemblyCopyright("Copyright ©  2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("658a6ee6-29c8-4fa5-85a1-6e319504cb4e")]
+[assembly: Guid("07c9aa36-9992-475c-90e1-25a29d842db8")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -1,22 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{99D2664A-B5FC-40CA-873B-6FF6B24375A9}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GithubForOutlook", "GithubForOutlook\GithubForOutlook.csproj", "{C1BDCC5D-70DE-448C-9234-5C55FD1E861E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build_scripts", "build_scripts", "{71B25D84-9FFD-4016-BA1F-37D047C6D89E}"
-	ProjectSection(SolutionItems) = preProject
-		..\build.cmd = ..\build.cmd
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GithubForOutlook.Logic", "GithubForOutlook.Logic\GithubForOutlook.Logic.csproj", "{8D5DDB2B-00BB-4E35-B852-8EDD0DBD7ED0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GithubForOutlook", "GithubForOutlook\GithubForOutlook.csproj", "{C551539C-C7F9-49D1-95CD-D20A2C3AFE04}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GithubForOutlook.Tests", "GithubForOutlook.Tests\GithubForOutlook.Tests.csproj", "{066276D0-A64D-4BD7-832F-BF9454330CC6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GithubForOutlook.Core", "GithubForOutlook.Core\GithubForOutlook.Core.csproj", "{A73DD25A-6781-441E-B8A5-C484485EBB34}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GithubForOutlook.Tests", "GithubForOutlook.Tests\GithubForOutlook.Tests.csproj", "{B29EEFDE-DC59-441A-A3C3-EA9A78FFB731}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,18 +13,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C551539C-C7F9-49D1-95CD-D20A2C3AFE04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C551539C-C7F9-49D1-95CD-D20A2C3AFE04}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C551539C-C7F9-49D1-95CD-D20A2C3AFE04}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C551539C-C7F9-49D1-95CD-D20A2C3AFE04}.Release|Any CPU.Build.0 = Release|Any CPU
-		{066276D0-A64D-4BD7-832F-BF9454330CC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{066276D0-A64D-4BD7-832F-BF9454330CC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{066276D0-A64D-4BD7-832F-BF9454330CC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{066276D0-A64D-4BD7-832F-BF9454330CC6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A73DD25A-6781-441E-B8A5-C484485EBB34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A73DD25A-6781-441E-B8A5-C484485EBB34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A73DD25A-6781-441E-B8A5-C484485EBB34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A73DD25A-6781-441E-B8A5-C484485EBB34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1BDCC5D-70DE-448C-9234-5C55FD1E861E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1BDCC5D-70DE-448C-9234-5C55FD1E861E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1BDCC5D-70DE-448C-9234-5C55FD1E861E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1BDCC5D-70DE-448C-9234-5C55FD1E861E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D5DDB2B-00BB-4E35-B852-8EDD0DBD7ED0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D5DDB2B-00BB-4E35-B852-8EDD0DBD7ED0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D5DDB2B-00BB-4E35-B852-8EDD0DBD7ED0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D5DDB2B-00BB-4E35-B852-8EDD0DBD7ED0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B29EEFDE-DC59-441A-A3C3-EA9A78FFB731}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B29EEFDE-DC59-441A-A3C3-EA9A78FFB731}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B29EEFDE-DC59-441A-A3C3-EA9A78FFB731}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B29EEFDE-DC59-441A-A3C3-EA9A78FFB731}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
