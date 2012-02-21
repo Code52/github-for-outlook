@@ -230,9 +230,6 @@
       <Name>GithubForOutlook.Logic</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="VSTOContrib.GettingStarted.txt" />
-  </ItemGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- Include additional build rules for an Office application add-in. -->
