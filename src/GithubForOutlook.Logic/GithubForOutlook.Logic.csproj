@@ -95,7 +95,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Ribbons\GithubTask.xml" />
-    <Content Include="VSTOContrib.GettingStarted.txt" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Ribbons\GithubTaskPanel.xaml">

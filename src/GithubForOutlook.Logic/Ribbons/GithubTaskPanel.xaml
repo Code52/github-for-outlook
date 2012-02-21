@@ -60,5 +60,5 @@
             </TabItem>
 
         </TabControl>
-    </Grid>
+	</Grid>
 </UserControl>
