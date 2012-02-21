@@ -1,5 +1,7 @@
 ﻿using System;
 using Autofac;
+using GithubForOutlook.Logic.Ribbons;
+using VSTOContrib.Core.RibbonFactory.Interfaces;
 
 namespace GithubForOutlook.Logic
 {
@@ -18,7 +20,9 @@ namespace GithubForOutlook.Logic
 
         private static void RegisterComponents(ContainerBuilder containerBuilder)
         {
-
+			containerBuilder.RegisterType<GithubTask>()
+				.As<IRibbonViewModel>()
+				.AsSelf();
         }
 
         public object Resolve(Type type)
