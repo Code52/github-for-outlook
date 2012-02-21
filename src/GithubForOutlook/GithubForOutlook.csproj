@@ -231,8 +231,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\github_logo_social_coding_outlined.png" />
-    <Content Include="Resources\octocat.png" />
     <Content Include="VSTOContrib.GettingStarted.txt" />
   </ItemGroup>
   <!-- Include the build rules for a C# project. -->
