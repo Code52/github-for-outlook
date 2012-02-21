@@ -1,4 +1,7 @@
 ﻿using System;
+using GithubForOutlook.Logic.Modules.Notifications;
+using GithubForOutlook.Logic.Modules.Settings;
+using GithubForOutlook.Logic.Modules.Tasks;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Outlook;
 using VSTOContrib.Core.RibbonFactory;
@@ -12,12 +15,16 @@ namespace GithubForOutlook.Logic.Ribbons
     [RibbonViewModel(OutlookRibbonType.OutlookTask)]
     public class GithubTask : OfficeViewModelBase, IRibbonViewModel, IRegisterCustomTaskPane
     {
+        
         private bool panelShown;
         private ICustomTaskPaneWrapper githubTaskPane;
         private bool isGithubTask;
 
-        public GithubTask()
+        public GithubTask(TasksViewModel tasks, NotificationsViewModel notifications, SettingsViewModel settings)
         {
+            Tasks = tasks;
+            Notifications = notifications;
+            Settings = settings;
         }
 
         public void Initialised(object context)
@@ -29,6 +36,10 @@ namespace GithubForOutlook.Logic.Ribbons
         public void CurrentViewChanged(object currentView)
         {
         }
+
+        public TasksViewModel Tasks { get; private set; }
+        public NotificationsViewModel Notifications { get; private set; }
+        public SettingsViewModel Settings { get; private set; }
 
         public bool IsGithubTask
         {

@@ -1,6 +1,8 @@
 ﻿using System;
 using Autofac;
 using GithubForOutlook.Logic.Ribbons;
+using NGitHub;
+using NGitHub.Authentication;
 using VSTOContrib.Core.RibbonFactory.Interfaces;
 
 namespace GithubForOutlook.Logic
@@ -20,9 +22,20 @@ namespace GithubForOutlook.Logic
 
         private static void RegisterComponents(ContainerBuilder containerBuilder)
         {
-			containerBuilder.RegisterType<GithubTask>()
+            var assembly = typeof (GithubTask).Assembly;
+
+            containerBuilder.RegisterAssemblyTypes(assembly)
+                .Where(t => t.Name.EndsWith("ViewModel"))
+                .AsSelf();
+
+        	containerBuilder.RegisterType<GithubTask>()
 				.As<IRibbonViewModel>()
 				.AsSelf();
+
+            containerBuilder.RegisterType<GitHubOAuthAuthorizer>()
+                            .AsImplementedInterfaces();
+            containerBuilder.RegisterType<GitHubClient>()
+                            .AsImplementedInterfaces();
         }
 
         public object Resolve(Type type)
