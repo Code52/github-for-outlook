@@ -59,19 +59,5 @@ namespace GithubForOutlook.Properties {
                 resourceCulture = value;
             }
         }
-        
-        internal static System.Drawing.Bitmap github_logo_social_coding_outlined {
-            get {
-                object obj = ResourceManager.GetObject("github_logo_social_coding_outlined", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap octocat {
-            get {
-                object obj = ResourceManager.GetObject("octocat", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }
