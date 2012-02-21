@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using GithubForOutlook.Logic.Ribbons;
+using NGitHub.Authentication;
 
 namespace GithubForOutlook.Logic
 {
@@ -28,7 +29,8 @@ namespace GithubForOutlook.Logic
             containerBuilder.RegisterType<GithubTask>()
                             .AsImplementedInterfaces();
 
-
+            containerBuilder.RegisterType<GitHubOAuthAuthorizer>()
+                            .AsImplementedInterfaces();
         }
 
         public object Resolve(Type type)
