@@ -34,8 +34,8 @@ namespace GithubForOutlook.Tests.Modules.Settings
         public void SignIn_WhenCallbackInvoked_SetsTheUser()
         {
             const string someValue = "1234";
-            SetAuthResponse(c => ExecuteSuccessCallback(c, someValue));
-            SetClientResponse(c => ReturnUser(c, "shiftkey", "foo"));
+            SetAuthResponse(c => ExecuteSuccessCallback(c[3], someValue));
+            SetClientResponse(c => ReturnUser(c[0], "shiftkey", "foo"));
 
             // act
             viewModel.SignIn();
@@ -45,7 +45,7 @@ namespace GithubForOutlook.Tests.Modules.Settings
         [Fact]
         public void SignIn_WhenErrorInvoked_DoesNotSetsTheUser()
         {
-            SetAuthResponse(ExecuteErrorCallback);
+            SetAuthResponse(c => ExecuteErrorCallback(c[4]));
 
             // act
             viewModel.SignIn();
@@ -72,21 +72,21 @@ namespace GithubForOutlook.Tests.Modules.Settings
             Assert.Null(viewModel.User);
         }
 
-        private static void ReturnUser(CallInfo callInfo, string name, string avatarUrl)
+        private static void ReturnUser(object parameter, string name, string avatarUrl)
         {
-            var callback = callInfo[0] as Action<NGitHub.Models.User>;
+            var callback = parameter as Action<NGitHub.Models.User>;
             if (callback != null) callback(new NGitHub.Models.User { AvatarUrl = avatarUrl, Name = name });
         }
 
-        private static void ExecuteErrorCallback(CallInfo callInfo)
+        private static void ExecuteErrorCallback(object parameter)
         {
-            var callback = callInfo[4] as Action<GitHubException>;
+            var callback = parameter as Action<GitHubException>;
             if (callback != null) callback(null);
         }
 
-        private static void ExecuteSuccessCallback(CallInfo callInfo, string someValue)
+        private static void ExecuteSuccessCallback(object parameter, string someValue)
         {
-            var callback = callInfo[3] as Action<string>;
+            var callback = parameter as Action<string>;
             if (callback != null) callback(someValue);
         }
 
