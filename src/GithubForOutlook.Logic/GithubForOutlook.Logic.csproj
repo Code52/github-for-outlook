@@ -70,6 +70,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddinBootstrapper.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Modules\Notifications\NotificationsViewModel.cs" />
+    <Compile Include="Modules\Settings\SettingsViewModel.cs" />
+    <Compile Include="Modules\Tasks\TasksViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ribbons\GithubTask.cs" />
     <Compile Include="Ribbons\GithubTaskPanel.xaml.cs">
@@ -81,7 +85,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Ribbons\GithubTask.xml" />
+    <EmbeddedResource Include="Ribbons\GithubTask.xml" />
     <Content Include="VSTOContrib.GettingStarted.txt" />
   </ItemGroup>
   <ItemGroup>

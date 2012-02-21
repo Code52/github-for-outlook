@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac;
+using GithubForOutlook.Logic.Ribbons;
 
 namespace GithubForOutlook.Logic
 {
@@ -18,6 +19,15 @@ namespace GithubForOutlook.Logic
 
         private static void RegisterComponents(ContainerBuilder containerBuilder)
         {
+            var assembly = typeof (GithubTask).Assembly;
+
+            containerBuilder.RegisterAssemblyTypes(assembly)
+                .Where(t => t.Name.EndsWith("ViewModel"))
+                .AsSelf();
+
+            containerBuilder.RegisterType<GithubTask>()
+                            .AsImplementedInterfaces();
+
 
         }
 
