@@ -5,7 +5,6 @@
       <tab idMso="TabTask">
         <group id="githubGroup" label="GitHub">
           <button id="createTask" label="Create on Github" onAction="CreateIssue"/>
-          <toggleButton id="showGithubPaneButton" getVisible="IsGithubTask" onAction="PanelShown" getPressed="PanelShown" label="View Github Details" showImage="false" />
         </group>
       </tab>
     </tabs>
