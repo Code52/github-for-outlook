@@ -72,6 +72,7 @@
     <Compile Include="AddinBootstrapper.cs" />
     <Compile Include="GithubTaskAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ribbons\MainExplorer\GithubExplorerRibbon.cs" />
     <Compile Include="Ribbons\GithubTask.cs" />
     <Compile Include="Ribbons\GithubTaskPanel.xaml.cs">
       <DependentUpon>GithubTaskPanel.xaml</DependentUpon>
@@ -79,6 +80,7 @@
     <Compile Include="Ribbons\IRibbonUI.cs" />
     <Compile Include="Ribbons\Email\GithubMailItem.cs" />
     <Compile Include="Services\IGithubService.cs" />
+    <Compile Include="Sync\GitTaskSync.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -94,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Ribbons\Email\GithubMailItem.xml" />
+    <EmbeddedResource Include="Ribbons\MainExplorer\GithubExplorerRibbon.xml" />
     <Content Include="VSTOContrib.GettingStarted.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
