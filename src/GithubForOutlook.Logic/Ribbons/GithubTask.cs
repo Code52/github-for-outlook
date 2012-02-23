@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Outlook;
 using VSTOContrib.Core.RibbonFactory;
@@ -14,16 +15,12 @@ namespace GithubForOutlook.Logic.Ribbons
     {
         private bool panelShown;
         private ICustomTaskPaneWrapper githubTaskPane;
-        private bool isGithubTask;
-
-        public GithubTask()
-        {
-        }
+        private GithubTaskAdapter githubIssue;
 
         public void Initialised(object context)
         {
-            //Stash this then start using custom properties to extend.
             var task = (TaskItem)context;
+            githubIssue = new GithubTaskAdapter(task);
         }
 
         public void CurrentViewChanged(object currentView)
@@ -32,10 +29,10 @@ namespace GithubForOutlook.Logic.Ribbons
 
         public bool IsGithubTask
         {
-            get { return isGithubTask; }
+            get { return githubIssue.IsGithubTask; }
             private set
             {
-                isGithubTask = value;
+                githubIssue.IsGithubTask = value;
                 RaisePropertyChanged(() => IsGithubTask);
             }
         }
@@ -52,6 +49,11 @@ namespace GithubForOutlook.Logic.Ribbons
             }
         }
 
+        public void CreateIssue(IRibbonControl control)
+        {
+            MessageBox.Show("Hai");
+        }
+
         public void RegisterTaskPanes(Register register)
         {
             githubTaskPane = register(() => new WpfPanelHost
@@ -61,8 +63,8 @@ namespace GithubForOutlook.Logic.Ribbons
                     DataContext = this
                 }
             }, "Github");
-            githubTaskPane.Visible = true;
-            PanelShown = true;
+            githubTaskPane.Visible = IsGithubTask;
+            PanelShown = IsGithubTask;
             githubTaskPane.VisibleChanged += GithubTaskPaneVisibleChanged;
             GithubTaskPaneVisibleChanged(this, EventArgs.Empty);
         }
