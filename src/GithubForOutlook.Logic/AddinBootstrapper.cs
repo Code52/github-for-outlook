@@ -1,6 +1,8 @@
 ﻿using System;
 using Autofac;
 using GithubForOutlook.Logic.Ribbons;
+using GithubForOutlook.Logic.Ribbons.Email;
+using GithubForOutlook.Logic.Ribbons.MainExplorer;
 using VSTOContrib.Core.RibbonFactory.Interfaces;
 
 namespace GithubForOutlook.Logic
@@ -23,6 +25,16 @@ namespace GithubForOutlook.Logic
 			containerBuilder.RegisterType<GithubTask>()
 				.As<IRibbonViewModel>()
 				.AsSelf();
+
+            containerBuilder.RegisterType<GithubMailItem>()
+                .As<IRibbonViewModel>()
+                .AsSelf();
+
+
+
+            containerBuilder.RegisterType<GithubExplorerRibbon>()
+                .As<IRibbonViewModel>()
+                .AsSelf();
         }
 
         public object Resolve(Type type)

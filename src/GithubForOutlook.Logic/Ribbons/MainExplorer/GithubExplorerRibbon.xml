@@ -2,9 +2,9 @@
 <customUI onLoad="Ribbon_Load" xmlns="http://schemas.microsoft.com/office/2006/01/customui">
   <ribbon>
     <tabs>
-      <tab idMso="TabReadMessage">
+      <tab idMso="TabMail">
         <group id="githubGroup" label="GitHub">
-          <button id="createTask" label="Create on Github" onAction="CreateIssue"/>
+          <button id="createTask" label="Create on Github" onAction="CreateIssue" getEnabled="MailItemSelected"/>
         </group>
       </tab>
     </tabs>
