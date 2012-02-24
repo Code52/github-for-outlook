@@ -153,8 +153,12 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="VSTOContrib.Core, Version=0.9.0.67, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="VSTOContrib.Outlook, Version=0.9.0.67, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="VSTOContrib.Core, Version=0.9.0.67, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VSTOContrib.Outlook.0.9.0.67\tools\net40\2010\VSTOContrib.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="VSTOContrib.Outlook, Version=0.9.0.67, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VSTOContrib.Outlook.0.9.0.67\tools\net40\2010\VSTOContrib.Outlook.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>

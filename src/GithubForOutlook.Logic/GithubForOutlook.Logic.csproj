@@ -72,11 +72,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VSTOContrib.Core, Version=0.9.0.67, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="VSTOContrib.Core, Version=0.9.0.67, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VSTOContrib.Outlook.0.9.0.67\tools\net40\2010\VSTOContrib.Core.dll</HintPath>
+    </Reference>
     <Reference Include="VSTOContrib.Extensions.Proxies">
       <HintPath>..\..\libs\VSTOContrib.Extensions.Proxies.dll</HintPath>
     </Reference>
-    <Reference Include="VSTOContrib.Outlook, Version=0.9.0.67, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="VSTOContrib.Outlook, Version=0.9.0.67, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VSTOContrib.Outlook.0.9.0.67\tools\net40\2010\VSTOContrib.Outlook.dll</HintPath>
+    </Reference>
     <Reference Include="VSTOContrib.Outlook.Extensions.Proxies">
       <HintPath>..\..\libs\VSTOContrib.Outlook.Extensions.Proxies.dll</HintPath>
     </Reference>
