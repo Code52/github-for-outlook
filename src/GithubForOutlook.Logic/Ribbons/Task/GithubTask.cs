@@ -11,7 +11,7 @@ using VSTOContrib.Core.RibbonFactory.Internal;
 using VSTOContrib.Core.Wpf;
 using VSTOContrib.Outlook.RibbonFactory;
 
-namespace GithubForOutlook.Logic.Ribbons
+namespace GithubForOutlook.Logic.Ribbons.Task
 {
     [RibbonViewModel(OutlookRibbonType.OutlookTask)]
     public class GithubTask : OfficeViewModelBase, IRibbonViewModel, IRegisterCustomTaskPane

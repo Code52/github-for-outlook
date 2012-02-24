@@ -69,12 +69,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VSTOContrib.Core">
-      <HintPath>..\packages\VSTOContrib.Outlook.0.9.0.67\tools\net40\2010\VSTOContrib.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="VSTOContrib.Outlook">
-      <HintPath>..\packages\VSTOContrib.Outlook.0.9.0.67\tools\net40\2010\VSTOContrib.Outlook.dll</HintPath>
-    </Reference>
+    <Reference Include="VSTOContrib.Core, Version=0.9.0.67, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="VSTOContrib.Outlook, Version=0.9.0.67, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -86,8 +82,8 @@
     <Compile Include="Modules\Tasks\TasksViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ribbons\MainExplorer\GithubExplorerRibbon.cs" />
-    <Compile Include="Ribbons\GithubTask.cs" />
-    <Compile Include="Ribbons\GithubTaskPanel.xaml.cs">
+    <Compile Include="Ribbons\Task\GithubTask.cs" />
+    <Compile Include="Ribbons\Task\GithubTaskPanel.xaml.cs">
       <DependentUpon>GithubTaskPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Ribbons\IRibbonUI.cs" />
@@ -99,10 +95,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Ribbons\GithubTask.xml" />
+    <EmbeddedResource Include="Ribbons\Task\GithubTask.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Ribbons\GithubTaskPanel.xaml">
+    <Page Include="Ribbons\Task\GithubTaskPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

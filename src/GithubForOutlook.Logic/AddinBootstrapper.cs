@@ -1,6 +1,6 @@
 ﻿using System;
 using Autofac;
-using GithubForOutlook.Logic.Ribbons;
+using GithubForOutlook.Logic.Ribbons.Task;
 using GithubForOutlook.Logic.Ribbons.Email;
 using GithubForOutlook.Logic.Ribbons.MainExplorer;
 using NGitHub;
@@ -30,10 +30,6 @@ namespace GithubForOutlook.Logic
                 .Where(t => t.Name.EndsWith("ViewModel"))
                 .AsSelf();
 
-        	containerBuilder.RegisterType<GithubTask>()
-				.As<IRibbonViewModel>()
-				.AsSelf();
-
             containerBuilder.RegisterType<GitHubOAuthAuthorizer>()
                             .AsImplementedInterfaces();
             containerBuilder.RegisterType<GitHubClient>()
@@ -43,7 +39,9 @@ namespace GithubForOutlook.Logic
                 .As<IRibbonViewModel>()
                 .AsSelf();
 
-
+            containerBuilder.RegisterType<GithubTask>()
+                .As<IRibbonViewModel>()
+                .AsSelf();
 
             containerBuilder.RegisterType<GithubExplorerRibbon>()
                 .As<IRibbonViewModel>()

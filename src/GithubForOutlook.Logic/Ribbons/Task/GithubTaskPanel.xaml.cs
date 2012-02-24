@@ -1,4 +1,4 @@
-﻿namespace GithubForOutlook.Logic.Ribbons
+﻿namespace GithubForOutlook.Logic.Ribbons.Task
 {
     public partial class GithubTaskPanel
     {
