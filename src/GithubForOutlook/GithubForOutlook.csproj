@@ -154,10 +154,10 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="VSTOContrib.Core">
-      <HintPath>..\packages\VSTOContrib.Outlook.0.9.0.65\tools\net40\2010\VSTOContrib.Core.dll</HintPath>
+      <HintPath>..\packages\VSTOContrib.Outlook.0.9.0.67\tools\net40\2010\VSTOContrib.Core.dll</HintPath>
     </Reference>
     <Reference Include="VSTOContrib.Outlook">
-      <HintPath>..\packages\VSTOContrib.Outlook.0.9.0.65\tools\net40\2010\VSTOContrib.Outlook.dll</HintPath>
+      <HintPath>..\packages\VSTOContrib.Outlook.0.9.0.67\tools\net40\2010\VSTOContrib.Outlook.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -200,6 +200,7 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="AddinBootstrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -238,6 +239,9 @@
       <Project>{8D5DDB2B-00BB-4E35-B852-8EDD0DBD7ED0}</Project>
       <Name>GithubForOutlook.Logic</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="VSTOContrib.GettingStarted.txt" />
   </ItemGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

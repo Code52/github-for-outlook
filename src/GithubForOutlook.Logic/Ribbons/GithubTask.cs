@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using GithubForOutlook.Logic.Modules.Notifications;
 using GithubForOutlook.Logic.Modules.Settings;
 using GithubForOutlook.Logic.Modules.Tasks;
@@ -18,7 +19,7 @@ namespace GithubForOutlook.Logic.Ribbons
         
         private bool panelShown;
         private ICustomTaskPaneWrapper githubTaskPane;
-        private bool isGithubTask;
+        private GithubTaskAdapter githubIssue;
 
         public GithubTask(TasksViewModel tasks, NotificationsViewModel notifications, SettingsViewModel settings)
         {
@@ -29,8 +30,8 @@ namespace GithubForOutlook.Logic.Ribbons
 
         public void Initialised(object context)
         {
-            //Stash this then start using custom properties to extend.
             var task = (TaskItem)context;
+            githubIssue = new GithubTaskAdapter(task);
         }
 
         public void CurrentViewChanged(object currentView)
@@ -43,10 +44,10 @@ namespace GithubForOutlook.Logic.Ribbons
 
         public bool IsGithubTask
         {
-            get { return isGithubTask; }
+            get { return githubIssue.IsGithubTask; }
             private set
             {
-                isGithubTask = value;
+                githubIssue.IsGithubTask = value;
                 RaisePropertyChanged(() => IsGithubTask);
             }
         }
@@ -63,6 +64,11 @@ namespace GithubForOutlook.Logic.Ribbons
             }
         }
 
+        public void CreateIssue(IRibbonControl control)
+        {
+            MessageBox.Show("Hai");
+        }
+
         public void RegisterTaskPanes(Register register)
         {
             githubTaskPane = register(() => new WpfPanelHost
@@ -72,8 +78,8 @@ namespace GithubForOutlook.Logic.Ribbons
                     DataContext = this
                 }
             }, "Github");
-            githubTaskPane.Visible = true;
-            PanelShown = true;
+            githubTaskPane.Visible = IsGithubTask;
+            PanelShown = IsGithubTask;
             githubTaskPane.VisibleChanged += GithubTaskPaneVisibleChanged;
             GithubTaskPaneVisibleChanged(this, EventArgs.Empty);
         }
