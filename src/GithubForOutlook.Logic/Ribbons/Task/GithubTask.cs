@@ -47,7 +47,7 @@ namespace GithubForOutlook.Logic.Ribbons.Task
             get { return githubIssue.IsGithubTask; }
             private set
             {
-                githubIssue.IsGithubTask = value;
+                //githubIssue.IsGithubTask = value;
                 RaisePropertyChanged(() => IsGithubTask);
             }
         }

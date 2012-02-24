@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using GithubForOutlook.Logic.Repositories.Interfaces;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Outlook;
 using VSTOContrib.Core.RibbonFactory;

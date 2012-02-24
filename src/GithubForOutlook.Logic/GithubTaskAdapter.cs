@@ -1,11 +1,12 @@
-﻿using Microsoft.Office.Interop.Outlook;
+﻿using System;
+using Microsoft.Office.Interop.Outlook;
 using VSTOContrib.Outlook;
 
 namespace GithubForOutlook.Logic
 {
     public class GithubTaskAdapter
     {
-        private const string Githubissueid = "GithubIssueId";
+        public const string Githubissueid = "GithubIssueId";
         private readonly TaskItem outlookTask;
         private bool? isGithubTask;
 
@@ -24,18 +25,48 @@ namespace GithubForOutlook.Logic
                 }
                 return isGithubTask.Value;
             }
-            set
-            {
-                isGithubTask = value;
-                outlookTask.SetPropertyValue(Githubissueid, OlUserPropertyType.olInteger, value, true);
-            }
         }
 
         private bool CheckIfGithubTask()
         {
-            var issueId = outlookTask.GetPropertyValue(Githubissueid, OlUserPropertyType.olInteger, false, o=>(int?)o, null);
+            var issueId = outlookTask.GetPropertyValue(Githubissueid, OlUserPropertyType.olText, false, o=>string.IsNullOrWhiteSpace(o.ToString()), false);
 
-            return issueId != null;
+            return issueId;
+        }
+
+        public string TaskId
+        {
+            get
+            {
+                return outlookTask.GetPropertyValue(Githubissueid, OlUserPropertyType.olText, false, (o) => o.ToString(), null);
+            }
+            set
+            {
+                outlookTask.SetPropertyValue(Githubissueid, OlUserPropertyType.olText, value.ToString(), true);
+            }
+        }
+
+        public string Title
+        {
+            get { return outlookTask.Subject; }
+            set { outlookTask.Subject = value; }
+        }
+
+        public string Body
+        {
+            get { return outlookTask.Body; }
+            set { outlookTask.Body = value; }
+        }
+
+        public OlTaskStatus Status
+        {
+            get { return outlookTask.Status; }
+            set { outlookTask.Status = value; }
+        }
+
+        public DateTime LastModified
+        {
+            get { return outlookTask.LastModificationTime; }
         }
     }
 }

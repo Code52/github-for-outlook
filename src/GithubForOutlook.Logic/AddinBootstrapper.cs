@@ -1,8 +1,11 @@
 ﻿using System;
 using Autofac;
+using GithubForOutlook.Logic.Repositories;
+using GithubForOutlook.Logic.Repositories.Interfaces;
 using GithubForOutlook.Logic.Ribbons.Task;
 using GithubForOutlook.Logic.Ribbons.Email;
 using GithubForOutlook.Logic.Ribbons.MainExplorer;
+using Microsoft.Office.Interop.Outlook;
 using NGitHub;
 using NGitHub.Authentication;
 using VSTOContrib.Core.RibbonFactory.Interfaces;
@@ -13,16 +16,16 @@ namespace GithubForOutlook.Logic
     {
         private readonly IContainer container;
 
-        public AddinBootstrapper()
+        public AddinBootstrapper(NameSpace nameSpace)
         {
             var containerBuilder = new ContainerBuilder();
 
-            RegisterComponents(containerBuilder);
+            RegisterComponents(containerBuilder, nameSpace);
 
             container = containerBuilder.Build();
         }
 
-        private static void RegisterComponents(ContainerBuilder containerBuilder)
+        private static void RegisterComponents(ContainerBuilder containerBuilder, NameSpace nameSpace)
         {
             var assembly = typeof (GithubTask).Assembly;
 
@@ -34,6 +37,14 @@ namespace GithubForOutlook.Logic
                             .AsImplementedInterfaces();
             containerBuilder.RegisterType<GitHubClient>()
                             .AsImplementedInterfaces();
+
+            containerBuilder.RegisterType<OutlookDispatchingRepository>()
+                .As<IOutlookRepository>();
+
+            containerBuilder.RegisterType<GithubRepository>()
+                .As<IGithubRepository>();
+
+            containerBuilder.Register(c => nameSpace);
 
             containerBuilder.RegisterType<GithubMailItem>()
                 .As<IRibbonViewModel>()

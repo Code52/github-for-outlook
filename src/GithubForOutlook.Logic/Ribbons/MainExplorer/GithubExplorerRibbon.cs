@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using GithubForOutlook.Logic.Models;
+using GithubForOutlook.Logic.Repositories.Interfaces;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Outlook;
 using VSTOContrib.Core.RibbonFactory;
@@ -13,6 +15,20 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
     [RibbonViewModel(OutlookRibbonType.OutlookExplorer)]
     public class GithubExplorerRibbon : OfficeViewModelBase, IRibbonViewModel
     {
+        public readonly IGithubRepository GithubRepository;
+        public readonly IOutlookRepository OutlookRepository;
+
+        public GithubExplorerRibbon(IGithubRepository githubRepository, IOutlookRepository outlookRepository)
+        {
+            GithubRepository = githubRepository;
+            OutlookRepository = outlookRepository;
+
+            // You need to enter your settings to test
+            githubRepository.Login("username", "password");
+            var task = githubRepository.GetProjects(new User() {Name = "username"});
+            var t = task.Result;
+        }
+
         private Explorer explorer;
 
         public void Initialised(object context)
