@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using GithubForOutlook.Logic.Repositories.Interfaces;
 using Microsoft.Office.Interop.Outlook;
 using NGitHub.Models;
@@ -37,7 +36,7 @@ namespace GithubForOutlook.Logic.Modules.Tasks
         {
             if (User == null) return new List<Repository>();
 
-            return githubRepository.GetProjects(User).Result;
+            return githubRepository.GetProjects(User).Result.Where(p => p.HasIssues);
         }
 
         private IEnumerable<Repository> projects;
@@ -54,7 +53,7 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 
         public IEnumerable<User> GetOrganisationUsers(Repository repository)
         {
-            var list = new List<User> { new User { Login = "None Assigned", Name = "None Assigned" } };
+            var list = new List<User> { new User { Login = "No User", Name = "No User" } };
 
             if (repository.Owner.IsOrganization)
             {
@@ -66,7 +65,35 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 
             return list;
         }
-                            
+
+        public IEnumerable<Label> GetLabels(Repository repository)
+        {
+            var list = new List<Label>();
+
+            if (repository.HasIssues)
+            {
+                var result = GithubRepository.GetLabels(User.Login, repository.Name).Result;
+
+                list.AddRange(result);
+            }
+
+            return list;
+        }
+
+        public IEnumerable<Milestone> GetMilestones(Repository repository)
+        {
+            var list = new List<Milestone>();
+
+            if (repository.HasIssues)
+            {
+                var result = GithubRepository.GetMilestones(User.Login, repository.Name).Result;
+
+                list.AddRange(result);
+            }
+
+            return list;
+        }
+       
         public Dictionary<User, IEnumerable<User>> GetOrganisationUsers()
         {
             if (User == null) return new Dictionary<User, IEnumerable<User>>();
@@ -116,7 +143,7 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 
             string assigned;
 
-            if (AssignedUser == null || AssignedUser.Login == "None Assigned") assigned = null;
+            if (AssignedUser == null || AssignedUser.Login == "No User") assigned = null;
             else assigned = AssignedUser.Login;
 
             var result = new Issue();

@@ -64,7 +64,19 @@ namespace GithubForOutlook.Logic.Repositories
         {
             return NGitHub<IEnumerable<User>, string, int>(client.Organizations.GetMembersAsync, user.Login, page);
         }
-        
+
+        public Task<IEnumerable<Label>> GetLabels(string username, string reponame)
+        {
+            return NGitHub<IEnumerable<Label>, string, string>(client.Issues.GetLabelsAsync, username,
+                                                                           reponame);
+        }
+
+        public Task<IEnumerable<Milestone>> GetMilestones(string username, string reponame)
+        {
+            return NGitHub<IEnumerable<Milestone>, string, string>(client.Issues.GetMilestonesAsync, username,
+                                                                           reponame);
+        }
+
         private Task<T> NGitHub<T>(Func<Action<T>, Action<Exception>, GitHubRequestAsyncHandle> call)
         {
             var completionSource = new TaskCompletionSource<T>();

@@ -42,7 +42,7 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
             var selected = Repositories.SelectedItem as Repository;
             if(selected == null) return;
 
-            UsersCombo.Items.Clear();
+            UsersCombo.ItemsSource = null;
             UsersCombo.ItemsSource = dc.GetOrganisationUsers(selected);
         }
     }

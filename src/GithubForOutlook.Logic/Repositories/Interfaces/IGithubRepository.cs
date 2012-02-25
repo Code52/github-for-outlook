@@ -20,6 +20,10 @@ namespace GithubForOutlook.Logic.Repositories.Interfaces
 
         Task<IEnumerable<User>> GetOrganisationUsers(User user, int page = 0);
 
+        Task<IEnumerable<Label>> GetLabels(string username, string reponame);
+
+        Task<IEnumerable<Milestone>> GetMilestones(string username, string reponame);
+
         void Login(string username, string password);
     }
 }
