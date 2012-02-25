@@ -45,14 +45,22 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
         public void CreateIssue(IRibbonControl ribbonControl)
         {
             //TODO create proper task window and show it here.. selectedMailItem will be populated properly
-            Tasks.Login(Settings.UserName, Settings.Password);
+
+            if (selectedMailItem == null) return;
+            
+            if(Tasks.User == null)
+                Tasks.Login(Settings.UserName, Settings.Password);
 
             var tasks = Tasks.GetProjects();
 
-            new Window
-                {
-                    Content = new TextBlock { Text = string.Format("Create issue here for {0}", selectedMailItem.Subject)}
-                }.Show();
+            Tasks.MailItem = selectedMailItem;
+
+            new GithubExplorerWindow(Tasks).Show();
+
+            //new Window
+            //    {
+            //        Content = new TextBlock { Text = string.Format("Create issue here for {0}", selectedMailItem.Subject)}
+            //    }.Show();
         }
 
         public void CurrentViewChanged(object currentView)

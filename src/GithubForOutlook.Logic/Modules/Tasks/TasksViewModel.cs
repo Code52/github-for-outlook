@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using GithubForOutlook.Logic.Repositories.Interfaces;
+using Microsoft.Office.Interop.Outlook;
 using NGitHub.Models;
 using VSTOContrib.Core.Wpf;
 
@@ -35,5 +36,6 @@ namespace GithubForOutlook.Logic.Modules.Tasks
             return githubRepository.GetProjects(User).Result;
         }
 
+        public MailItem MailItem { get; set; }
     }
 }
