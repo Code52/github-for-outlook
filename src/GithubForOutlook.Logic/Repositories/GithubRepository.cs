@@ -60,6 +60,11 @@ namespace GithubForOutlook.Logic.Repositories
                                                                            reponame, state, page);
         }
 
+        public Task<IEnumerable<User>> GetOrganisationUsers(NGitHub.Models.User user, int page = 0)
+        {
+            return NGitHub<IEnumerable<User>, string, int>(client.Organizations.GetMembersAsync, user.Login, page);
+        }
+        
         private Task<T> NGitHub<T>(Func<Action<T>, Action<Exception>, GitHubRequestAsyncHandle> call)
         {
             var completionSource = new TaskCompletionSource<T>();

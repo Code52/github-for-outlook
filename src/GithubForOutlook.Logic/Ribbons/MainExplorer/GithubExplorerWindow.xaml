@@ -44,40 +44,66 @@
             <ColumnDefinition Width="300" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        
-        <ListBox Grid.Column="0"
+
+        <ListBox  x:Name="Repositories"
+                  Grid.Column="0"
                   BorderThickness="0"
                   BorderBrush="Transparent"
                   Padding="0"
                   SnapsToDevicePixels="True"
                   ItemsSource="{Binding Projects}"
                   SelectedItem="{Binding SelectedProject}"
-                  ItemContainerStyle="{StaticResource RepositoryItemContainer}">
+                  ItemContainerStyle="{StaticResource RepositoryItemContainer}"
+                  SelectionChanged="Repositories_SelectionChanged">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock FontSize="18" Foreground="#FF666666" Background="Transparent" Text="{Binding FullName}" HorizontalAlignment="Stretch" VerticalAlignment="Center" SnapsToDevicePixels="True" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        
-        <Grid Grid.Column="1" Margin="20, 0, 0, 0">
+
+        <Grid Grid.Column="1" Margin="40, 0, 0, 0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="80" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="200" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF666666" FontSize="18" Text="Issue:" />
-            <TextBox Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" FontSize="18" Text="{Binding MailItem.Subject}" HorizontalAlignment="Stretch" Foreground="Black" />
+            <TextBox Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" FontSize="18" Text="{Binding Title}" HorizontalAlignment="Stretch" Foreground="Black" />
 
             <TextBlock Grid.Row="1" Grid.Column="0" Foreground="#FF666666" FontSize="18" Text="Details:" />
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding MailItem.Body}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Foreground="Black" />
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,10" Text="{Binding Body}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Foreground="Black" />
 
-            <Button Grid.Row="3" Grid.Column="1" Width="100" HorizontalAlignment="Right" Content="Create" Click="CreateIssue_Click" />
+            <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF666666" FontSize="18" Text="Assigned:" />
+            <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,10" Width="300" FontSize="18" x:Name="UsersCombo" SelectedItem="{Binding AssignedUser}" DisplayMemberPath="Login" Foreground="Black">
+                <ComboBox.Style>
+                    <Style TargetType="ComboBox">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=SelectedItem, ElementName=Repositories}"  Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ComboBox.Style>
+            </ComboBox>
+
+            <Button Grid.Row="3" Grid.Column="1" Width="100" HorizontalAlignment="Right" Content="Create" Click="CreateIssue_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=SelectedItem, ElementName=Repositories}"  Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </Grid>
     </Grid>
 </Controls:MetroWindow>

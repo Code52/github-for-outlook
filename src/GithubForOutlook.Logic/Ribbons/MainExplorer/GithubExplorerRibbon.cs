@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using GithubForOutlook.Logic.Models;
@@ -19,15 +20,15 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
     [RibbonViewModel(OutlookRibbonType.OutlookExplorer)]
     public class GithubExplorerRibbon : OfficeViewModelBase, IRibbonViewModel
     {
-        public readonly SettingsViewModel Settings;
-        public readonly TasksViewModel Tasks;
-        public readonly IOutlookRepository OutlookRepository;
+        private readonly SettingsViewModel settings;
+        private readonly TasksViewModel tasks;
+        private readonly IOutlookRepository outlookRepository;
 
         public GithubExplorerRibbon(SettingsViewModel settings, TasksViewModel tasks, IOutlookRepository outlookRepository)
         {
-            Settings = settings;
-            Tasks = tasks;
-            OutlookRepository = outlookRepository;
+            this.settings = settings;
+            this.tasks = tasks;
+            this.outlookRepository = outlookRepository;
         }
 
         private Explorer explorer;
@@ -48,19 +49,19 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
 
             if (selectedMailItem == null) return;
             
-            if(Tasks.User == null)
-                Tasks.Login(Settings.UserName, Settings.Password);
+            if(tasks.User == null)
+                tasks.Login(settings.UserName, settings.Password);
 
-            var tasks = Tasks.GetProjects();
+            tasks.Title = selectedMailItem.Subject;
+            tasks.Sender = selectedMailItem.Sender.Name;
+            tasks.ReceivedDate = selectedMailItem.ReceivedTime;
+            tasks.Body = string.Format("Sender: {0} <{1}>\nReceived: {2}\n\n{3}", 
+                                        selectedMailItem.Sender.Name,
+                                        selectedMailItem.Sender.Address,
+                                        selectedMailItem.ReceivedTime.ToString(CultureInfo.CurrentCulture),
+                                        selectedMailItem.Body);
 
-            Tasks.MailItem = selectedMailItem;
-
-            new GithubExplorerWindow(Tasks).Show();
-
-            //new Window
-            //    {
-            //        Content = new TextBlock { Text = string.Format("Create issue here for {0}", selectedMailItem.Subject)}
-            //    }.Show();
+            new GithubExplorerWindow(tasks).Show();
         }
 
         public void CurrentViewChanged(object currentView)

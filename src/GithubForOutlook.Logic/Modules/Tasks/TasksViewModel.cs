@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GithubForOutlook.Logic.Repositories.Interfaces;
@@ -49,15 +50,73 @@ namespace GithubForOutlook.Logic.Modules.Tasks
             }
         }
 
+        public IEnumerable<User> GetOrganisationUsers(Repository repository)
+        {
+            var list = new List<User> { new User { Login = "None Assigned", Name = "None Assigned" } };
+
+            if (repository.Owner.IsOrganization)
+            {
+                var result = GithubRepository.GetOrganisationUsers(repository.Owner).Result;
+
+                list.AddRange(result);
+            }
+            else list.Add(repository.Owner);
+
+            return list;
+        }
+                            
+        public Dictionary<User, IEnumerable<User>> GetOrganisationUsers()
+        {
+            if (User == null) return new Dictionary<User, IEnumerable<User>>();
+
+            var results = new Dictionary<User, IEnumerable<User>>();
+
+            var organisations = GithubRepository.GetOrganisations(User.Login).Result.ToList();
+            organisations.Add(User);
+
+            foreach (var repo in organisations)
+            {
+                var result = GithubRepository.GetOrganisationUsers(repo).Result;
+                results.Add(repo, result);
+            }
+
+            return null;
+        }
+
+        private Dictionary<User, IEnumerable<User>> organisationUsers;
+        public Dictionary<User, IEnumerable<User>> OrganisationUsers
+        {
+            get
+            {
+                if (organisationUsers == null)
+                    organisationUsers = GetOrganisationUsers();
+
+                return organisationUsers;
+            }
+        }
+
         public Repository SelectedProject { get; set; }
 
-        public MailItem MailItem { get; set; }
+        public string Title { get; set; }
 
-        public void CreateIssue(string title, string body)
+        public string Body { get; set; }
+
+        public string Sender { get; set; }
+
+        public DateTime ReceivedDate { get; set; }
+
+        public User AssignedUser { get; set; }
+
+        public void CreateIssue()
         {
-            if (User == null || SelectedProject == null) return;
+            if (User == null || SelectedProject == null || string.IsNullOrWhiteSpace(Title) || string.IsNullOrWhiteSpace(Body)) return;
 
-            var result = githubRepository.CreateIssue(User.Login, SelectedProject.Name, title, body, User.Login, null, null).Result;
+            string assigned;
+
+            if (AssignedUser == null || AssignedUser.Login == "None Assigned") assigned = null;
+            else assigned = AssignedUser.Login;
+
+            var result = githubRepository.CreateIssue(User.Login, SelectedProject.Name, Title, Body, assigned, null, null).Result;
         }
     }
 }

@@ -18,6 +18,8 @@ namespace GithubForOutlook.Logic.Repositories.Interfaces
 
         Task<IEnumerable<Issue>> GetIssues(string username, string reponame, State state = State.Open, int page = 0);
 
+        Task<IEnumerable<User>> GetOrganisationUsers(User user, int page = 0);
+
         void Login(string username, string password);
     }
 }
