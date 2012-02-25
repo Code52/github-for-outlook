@@ -2,10 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using GithubForOutlook.Logic.Repositories.Interfaces;
 using Microsoft.Office.Interop.Outlook;
 using NGitHub.Models;
 using VSTOContrib.Core.Wpf;
+using Exception = System.Exception;
 
 namespace GithubForOutlook.Logic.Modules.Tasks
 {
@@ -107,16 +109,28 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 
         public User AssignedUser { get; set; }
 
-        public void CreateIssue()
+        public ValidationResult<Issue> CreateIssue()
         {
-            if (User == null || SelectedProject == null || string.IsNullOrWhiteSpace(Title) || string.IsNullOrWhiteSpace(Body)) return;
+            if (User == null || SelectedProject == null || string.IsNullOrWhiteSpace(Title) || string.IsNullOrWhiteSpace(Body))
+                return ValidationResult<Issue>.Failure("Please enter all details");
 
             string assigned;
 
             if (AssignedUser == null || AssignedUser.Login == "None Assigned") assigned = null;
             else assigned = AssignedUser.Login;
 
-            var result = githubRepository.CreateIssue(User.Login, SelectedProject.Name, Title, Body, assigned, null, null).Result;
+            var result = new Issue();
+
+            try
+            {
+                result = githubRepository.CreateIssue(User.Login, SelectedProject.Name, Title, Body, assigned, null, null).Result;
+            }
+            catch (Exception ex)
+            {
+                return ValidationResult<Issue>.Failure("Error Uploading Issue: " + ex.Message);
+            }
+
+            return ValidationResult<Issue>.Success.WithData(result);
         }
     }
 }

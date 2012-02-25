@@ -15,10 +15,23 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
 
         private void CreateIssue_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            ResultText.Text = "";
+
             var dc = this.DataContext as TasksViewModel;
             if (dc == null) return;
 
-            dc.CreateIssue();
+            var issue = dc.CreateIssue();
+
+            if (issue.IsValid == false)
+            {
+                ResultText.Text = issue.Message;
+                ResultText.Foreground = System.Windows.Media.Brushes.Red;
+            }
+            else
+            {
+                ResultText.Text = string.Format("Issue created: {0}", issue.Data.Number);
+                ResultText.Foreground = System.Windows.Media.Brushes.Green;
+            }
         }
 
         private void Repositories_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)

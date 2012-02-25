@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" mc:Ignorable="d" 
              ShowTitleBar="False"
-             d:DesignHeight="300" d:DesignWidth="400">
+             d:DesignHeight="600" d:DesignWidth="800">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -57,7 +57,7 @@
                   SelectionChanged="Repositories_SelectionChanged">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock FontSize="18" Foreground="#FF666666" Background="Transparent" Text="{Binding FullName}" HorizontalAlignment="Stretch" VerticalAlignment="Center" SnapsToDevicePixels="True" />
+                    <TextBlock FontSize="14" Padding="2,0,2,0" Foreground="#FF666666" Background="Transparent" Text="{Binding FullName}" HorizontalAlignment="Stretch" VerticalAlignment="Center" SnapsToDevicePixels="True" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
@@ -72,6 +72,7 @@
                 <RowDefinition Height="200" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="80" />
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF666666" FontSize="18" Text="Issue:" />
@@ -81,7 +82,7 @@
             <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,10" Text="{Binding Body}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Foreground="Black" />
 
             <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF666666" FontSize="18" Text="Assigned:" />
-            <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,10" Width="300" FontSize="18" x:Name="UsersCombo" SelectedItem="{Binding AssignedUser}" DisplayMemberPath="Login" Foreground="Black">
+            <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,10" Width="300" FontSize="18" x:Name="UsersCombo" SelectedItem="{Binding AssignedUser}" DisplayMemberPath="Login" Foreground="Black" HorizontalAlignment="Left" VerticalAlignment="Center">
                 <ComboBox.Style>
                     <Style TargetType="ComboBox">
                         <Style.Triggers>
@@ -104,6 +105,9 @@
                     </Style>
                 </Button.Style>
             </Button>
+            <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="4" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                <TextBlock x:Name="ResultText" FontSize="18" HorizontalAlignment="Left" />
+            </StackPanel>
         </Grid>
     </Grid>
 </Controls:MetroWindow>
