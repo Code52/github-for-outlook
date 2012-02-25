@@ -21,7 +21,7 @@
     <Window.Foreground>
         <SolidColorBrush Color="{DynamicResource BlackBrush}" />
     </Window.Foreground>
-    <Grid Margin="10, 50, 10, 50">
+    <Grid Margin="10, 0, 10, 50">
         <Grid.Resources>
             <Style x:Key="RepositoryItemContainer" TargetType="{x:Type ListBoxItem}">
                 <Setter Property="Template">
@@ -44,9 +44,19 @@
             <ColumnDefinition Width="300" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
 
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <Image Source="{Binding User.AvatarUrl}" Height="32" Width="32" VerticalAlignment="Center" HorizontalAlignment="Left" />
+            <TextBlock Margin="5,0,0,0" Text="{Binding User.Login}" Foreground="#FF666666" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" />
+        </StackPanel>
+        
         <ListBox  x:Name="Repositories"
                   Grid.Column="0"
+                  Grid.Row="1"
                   BorderThickness="0"
                   BorderBrush="Transparent"
                   Padding="0"
@@ -62,7 +72,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <Grid Grid.Column="1" Margin="40, 0, 0, 0">
+        <Grid Grid.Column="1" Grid.Row="1"  Margin="40, 0, 0, 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="80" />
                 <ColumnDefinition />
