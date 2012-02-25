@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using Analects.SettingsService;
 using GithubForOutlook.Logic.Models;
 using NGitHub;
 using NGitHub.Authentication;
@@ -11,71 +12,45 @@ namespace GithubForOutlook.Logic.Modules.Settings
 
     public class SettingsViewModel : OfficeViewModelBase
     {
-        private readonly IGitHubOAuthAuthorizer authorizer;
-        private readonly IGitHubClient client;
+        private readonly ApplicationSettings settings;
+        private readonly ISettingsService settingsService;
 
-        public SettingsViewModel(IGitHubOAuthAuthorizer authorizer, IGitHubClient client)
+        public SettingsViewModel(ApplicationSettings settings, ISettingsService settingsService)
         {
-            this.authorizer = authorizer;
-            this.client = client;
+            this.settings = settings;
+            this.settingsService = settingsService;
         }
 
-        private bool trackIssues;
-        public bool TrackIssues
+        public bool TrackIssues { get; set; }
+
+        public bool TrackPullRequests { get; set; }
+
+        public User User { get; set; }
+
+        public string UserName
         {
-            get { return trackIssues; }
+            get { return settings.UserName; }
             set
             {
-                trackIssues = value;
-                RaisePropertyChanged(() => TrackIssues);
+                settings.UserName = value;
+                RaisePropertyChanged(() => "UserName");
             }
         }
 
-        private bool trackPullRequests;
-        public bool TrackPullRequests
+        public string Password
         {
-            get { return trackPullRequests; }
+            get { return settings.Password; }
             set
             {
-                trackPullRequests = value;
-                RaisePropertyChanged(() => TrackPullRequests);
+                settings.Password = value;
+                RaisePropertyChanged(() => "Password");
             }
         }
 
-        private User user;
-        public User User
+        public void SaveSettings()
         {
-            get { return user; }
-            set
-            {
-                user = value;
-                RaisePropertyChanged(() => User);
-            }
-        }
-
-        public ICommand SignInCommand { get { return new DelegateCommand(SignIn); } }
-
-        public void SignIn()
-        {
-            // TODO: settings provider
-            authorizer.GetAccessTokenAsync("clientId", "clientSecret", "", OnCompleted, OnError);
-        }
-
-        private void OnError(GitHubException obj)
-        {
-
-        }
-
-        private void OnCompleted(string obj)
-        {
-            // TODO: save token to settings
-            client.Authenticator = new OAuth2UriQueryParameterAuthenticator(obj);
-            client.Users.GetAuthenticatedUserAsync(MapUser, LogError);
-        }
-
-        private void LogError(GitHubException obj)
-        {
-
+            settingsService.Set("Settings", settings);
+            settingsService.Save();
         }
 
         private void MapUser(NGitHub.Models.User obj)

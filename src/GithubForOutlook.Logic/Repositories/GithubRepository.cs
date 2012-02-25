@@ -39,12 +39,12 @@ namespace GithubForOutlook.Logic.Repositories
             return NGitHub<IEnumerable<User>, string, int>(client.Organizations.GetOrganizationsAsync, username, page);
         }
 
-        public Task<IEnumerable<Repository>> GetProjects(Models.User user, int page = 0)
+        public Task<IEnumerable<Repository>> GetProjects(NGitHub.Models.User user, int page = 0)
         {
             //if (user.IsOrganisation)
             //    return NGitHub<IEnumerable<Repository>, string, int, RepositoryTypes>(_client.Organizations., user.Username, page, RepositoryTypes.Member);
             //else
-            return NGitHub<IEnumerable<Repository>, string, int, RepositoryTypes>(client.Repositories.GetRepositoriesAsync, user.Name, page, RepositoryTypes.All);
+            return NGitHub<IEnumerable<Repository>, string, int, RepositoryTypes>(client.Repositories.GetRepositoriesAsync, user.Login, page, RepositoryTypes.All);
         }
 
         public Task<Issue> CreateIssue(string username, string reponame, string title, string body, string assigneename,

@@ -1,5 +1,7 @@
 ﻿using System;
+using Analects.SettingsService;
 using Autofac;
+using GithubForOutlook.Logic.Models;
 using GithubForOutlook.Logic.Repositories;
 using GithubForOutlook.Logic.Repositories.Interfaces;
 using GithubForOutlook.Logic.Ribbons.Task;
@@ -38,13 +40,21 @@ namespace GithubForOutlook.Logic
             containerBuilder.RegisterType<GitHubClient>()
                             .AsImplementedInterfaces();
 
+            containerBuilder.Register(c => nameSpace).SingleInstance();
+            
+            containerBuilder.RegisterType<SettingsService>().As<ISettingsService>().SingleInstance();
+
+            var sservice = new SettingsService();
+            var settings = sservice.Get<ApplicationSettings>("Settings");
+            if(settings == null) settings = new ApplicationSettings() { UserName = "code52testing", Password = "code52test123"};
+
+            containerBuilder.Register(c => settings).SingleInstance();
+
             containerBuilder.RegisterType<OutlookDispatchingRepository>()
                 .As<IOutlookRepository>();
 
             containerBuilder.RegisterType<GithubRepository>()
                 .As<IGithubRepository>();
-
-            containerBuilder.Register(c => nameSpace);
 
             containerBuilder.RegisterType<GithubMailItem>()
                 .As<IRibbonViewModel>()

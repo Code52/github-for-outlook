@@ -1,6 +1,9 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using GithubForOutlook.Logic.Models;
+using GithubForOutlook.Logic.Modules.Settings;
+using GithubForOutlook.Logic.Modules.Tasks;
 using GithubForOutlook.Logic.Repositories.Interfaces;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Outlook;
@@ -9,24 +12,22 @@ using VSTOContrib.Core.RibbonFactory.Interfaces;
 using VSTOContrib.Core.Wpf;
 using VSTOContrib.Outlook.RibbonFactory;
 using VSTOContrib.Core.Extensions;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace GithubForOutlook.Logic.Ribbons.MainExplorer
 {
     [RibbonViewModel(OutlookRibbonType.OutlookExplorer)]
     public class GithubExplorerRibbon : OfficeViewModelBase, IRibbonViewModel
     {
-        public readonly IGithubRepository GithubRepository;
+        public readonly SettingsViewModel Settings;
+        public readonly TasksViewModel Tasks;
         public readonly IOutlookRepository OutlookRepository;
 
-        public GithubExplorerRibbon(IGithubRepository githubRepository, IOutlookRepository outlookRepository)
+        public GithubExplorerRibbon(SettingsViewModel settings, TasksViewModel tasks, IOutlookRepository outlookRepository)
         {
-            GithubRepository = githubRepository;
+            Settings = settings;
+            Tasks = tasks;
             OutlookRepository = outlookRepository;
-
-            // You need to enter your settings to test
-            githubRepository.Login("username", "password");
-            var task = githubRepository.GetProjects(new User() {Name = "username"});
-            var t = task.Result;
         }
 
         private Explorer explorer;
@@ -44,6 +45,10 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
         public void CreateIssue(IRibbonControl ribbonControl)
         {
             //TODO create proper task window and show it here.. selectedMailItem will be populated properly
+            Tasks.Login(Settings.UserName, Settings.Password);
+
+            var tasks = Tasks.GetProjects();
+
             new Window
                 {
                     Content = new TextBlock { Text = string.Format("Create issue here for {0}", selectedMailItem.Subject)}

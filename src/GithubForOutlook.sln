@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GithubForOutlook.Logic", "G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GithubForOutlook.Tests", "GithubForOutlook.Tests\GithubForOutlook.Tests.csproj", "{B29EEFDE-DC59-441A-A3C3-EA9A78FFB731}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6A99D177-CAAE-464C-97E8-E74D91B3CF41}"
+	ProjectSection(SolutionItems) = preProject
+		Readme-First.txt = Readme-First.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using VSTOContrib.Core.Wpf;
 
 namespace GithubForOutlook.Logic.Models
 {
-    public class ApplicationSettings
+    [Serializable]
+    public class ApplicationSettings : OfficeViewModelBase
     {
-        public User User { get; set; }
-
+        public string UserName { get; set; }
+        public string Password { get; set; }
     }
 }

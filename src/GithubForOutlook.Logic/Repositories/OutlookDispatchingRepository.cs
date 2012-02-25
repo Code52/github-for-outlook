@@ -19,10 +19,10 @@ namespace GithubForOutlook.Logic.Repositories
         private readonly NameSpace _session;
         private readonly ApplicationSettings _settings;
 
-        public OutlookDispatchingRepository(NameSpace session)//, ApplicationSettings settings)
+        public OutlookDispatchingRepository(NameSpace session, ApplicationSettings settings)
         {
             _session = session;
-            //_settings = settings;
+            _settings = settings;
             if(System.Windows.Application.Current != null)
                 _outlookStaDispatcher = System.Windows.Application.Current.Dispatcher;
 
