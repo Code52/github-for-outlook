@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using System.Linq;
 using GithubForOutlook.Logic.Repositories.Interfaces;
 using Microsoft.Office.Interop.Outlook;
 using NGitHub.Models;
@@ -36,6 +37,27 @@ namespace GithubForOutlook.Logic.Modules.Tasks
             return githubRepository.GetProjects(User).Result;
         }
 
+        private IEnumerable<Repository> projects;
+        public IEnumerable<Repository> Projects
+        {
+            get
+            {
+                if (projects == null || !projects.Any())
+                    projects = GetProjects();
+
+                return projects;
+            }
+        }
+
+        public Repository SelectedProject { get; set; }
+
         public MailItem MailItem { get; set; }
+
+        public void CreateIssue(string title, string body)
+        {
+            if (User == null || SelectedProject == null) return;
+
+            var result = githubRepository.CreateIssue(User.Login, SelectedProject.Name, title, body, User.Login, null, null).Result;
+        }
     }
 }

@@ -21,7 +21,63 @@
     <Window.Foreground>
         <SolidColorBrush Color="{DynamicResource BlackBrush}" />
     </Window.Foreground>
-    <Grid>
-        <TextBlock Text="{Binding MailItem.Subject}" HorizontalAlignment="Stretch" Foreground="Black" />
-	</Grid>
+    <Grid Margin="10, 50, 10, 50">
+        <Grid.Resources>
+            <Style x:Key="RepositoryItemContainer" TargetType="{x:Type ListBoxItem}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                            <Border x:Name="RepoBorder" Margin="-2, 0, 0, 0" Padding="2,0,2,0" Height="48" Background="#FFEEEEEE" HorizontalAlignment="Stretch" VerticalAlignment="Center" SnapsToDevicePixels="True">
+                                <ContentPresenter />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter TargetName="RepoBorder" Property="Background" Value="#FFDDDDDD" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        
+        <ListBox Grid.Column="0"
+                  BorderThickness="0"
+                  BorderBrush="Transparent"
+                  Padding="0"
+                  SnapsToDevicePixels="True"
+                  ItemsSource="{Binding Projects}"
+                  SelectedItem="{Binding SelectedProject}"
+                  ItemContainerStyle="{StaticResource RepositoryItemContainer}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock FontSize="18" Foreground="#FF666666" Background="Transparent" Text="{Binding FullName}" HorizontalAlignment="Stretch" VerticalAlignment="Center" SnapsToDevicePixels="True" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+        <Grid Grid.Column="1" Margin="20, 0, 0, 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="200" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF666666" FontSize="18" Text="Issue:" />
+            <TextBox Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" FontSize="18" Text="{Binding MailItem.Subject}" HorizontalAlignment="Stretch" Foreground="Black" />
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Foreground="#FF666666" FontSize="18" Text="Details:" />
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding MailItem.Body}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Foreground="Black" />
+
+            <Button Grid.Row="3" Grid.Column="1" Width="100" HorizontalAlignment="Right" Content="Create" Click="CreateIssue_Click" />
+        </Grid>
+    </Grid>
 </Controls:MetroWindow>
