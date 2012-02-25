@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" mc:Ignorable="d" 
+             ShowTitleBar="False"
              d:DesignHeight="300" d:DesignWidth="400">
     <Window.Resources>
         <ResourceDictionary>
@@ -13,7 +14,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -21,6 +22,6 @@
         <SolidColorBrush Color="{DynamicResource BlackBrush}" />
     </Window.Foreground>
     <Grid>
-        <TextBlock Text="{Binding MailItem.Subject}" HorizontalAlignment="Stretch" Foreground="White" />
+        <TextBlock Text="{Binding MailItem.Subject}" HorizontalAlignment="Stretch" Foreground="Black" />
 	</Grid>
 </Controls:MetroWindow>
