@@ -1,12 +1,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using GithubForOutlook.Logic.Models;
 using GithubForOutlook.Logic.Repositories.Interfaces;
 using Microsoft.Office.Interop.Outlook;
 using NGitHub.Models;
 using VSTOContrib.Core.Wpf;
 using Exception = System.Exception;
+using User = NGitHub.Models.User;
 
 namespace GithubForOutlook.Logic.Modules.Tasks
 {
@@ -30,13 +33,13 @@ namespace GithubForOutlook.Logic.Modules.Tasks
             User = githubRepository.GetUser().Result;
         }
 
-        public NGitHub.Models.User User { get; set; }
+        public User User { get; set; }
 
         public IEnumerable<Repository> GetProjects()
         {
             if (User == null) return new List<Repository>();
 
-            return githubRepository.GetProjects(User).Result.Where(p => p.HasIssues);
+            return githubRepository.GetProjects(User.Login).Result.Where(p => p.HasIssues);
         }
 
         private IEnumerable<Repository> projects;
@@ -57,7 +60,7 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 
             if (repository.Owner.IsOrganization)
             {
-                var result = GithubRepository.GetOrganisationUsers(repository.Owner).Result;
+                var result = GithubRepository.GetOrganisationUsers(repository.Owner.Login).Result;
 
                 list.AddRange(result);
             }
@@ -70,9 +73,11 @@ namespace GithubForOutlook.Logic.Modules.Tasks
         {
             var list = new List<Label>();
 
+            if (User == null || repository == null) return list;
+
             if (repository.HasIssues)
             {
-                var result = GithubRepository.GetLabels(User.Login, repository.Name).Result;
+                var result = GithubRepository.GetLabels(repository.Owner.Login, repository.Name).Result;
 
                 list.AddRange(result);
             }
@@ -82,11 +87,13 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 
         public IEnumerable<Milestone> GetMilestones(Repository repository)
         {
-            var list = new List<Milestone>();
+            var list = new List<Milestone> { new Milestone { Title = "No Milestone" }};
+
+            if (User == null || repository == null) return list;
 
             if (repository.HasIssues)
             {
-                var result = GithubRepository.GetMilestones(User.Login, repository.Name).Result;
+                var result = GithubRepository.GetMilestones(repository.Owner.Login, repository.Name).Result;
 
                 list.AddRange(result);
             }
@@ -96,16 +103,16 @@ namespace GithubForOutlook.Logic.Modules.Tasks
        
         public Dictionary<User, IEnumerable<User>> GetOrganisationUsers()
         {
-            if (User == null) return new Dictionary<User, IEnumerable<User>>();
-
             var results = new Dictionary<User, IEnumerable<User>>();
+
+            if (User == null) return results;
 
             var organisations = GithubRepository.GetOrganisations(User.Login).Result.ToList();
             organisations.Add(User);
 
             foreach (var repo in organisations)
             {
-                var result = GithubRepository.GetOrganisationUsers(repo).Result;
+                var result = GithubRepository.GetOrganisationUsers(repo.Login).Result;
                 results.Add(repo, result);
             }
 
@@ -124,6 +131,19 @@ namespace GithubForOutlook.Logic.Modules.Tasks
             }
         }
 
+        public ObservableCollection<SelectionLabel> Labels { get; set; }
+
+        public void SetLabels()
+        {
+            Labels = new ObservableCollection<SelectionLabel>(GetLabels(SelectedProject).Select(s => new SelectionLabel
+                                                                {
+                                                                  IsChecked = false,
+                                                                  Color = s.Color,
+                                                                  Name = s.Name,
+                                                                  Url = s.Url
+                                                                }));
+        }
+
         public Repository SelectedProject { get; set; }
 
         public string Title { get; set; }
@@ -136,6 +156,8 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 
         public User AssignedUser { get; set; }
 
+        public Milestone SelectedMilestone { get; set; }
+
         public ValidationResult<Issue> CreateIssue()
         {
             if (User == null || SelectedProject == null || string.IsNullOrWhiteSpace(Title) || string.IsNullOrWhiteSpace(Body))
@@ -146,11 +168,18 @@ namespace GithubForOutlook.Logic.Modules.Tasks
             if (AssignedUser == null || AssignedUser.Login == "No User") assigned = null;
             else assigned = AssignedUser.Login;
 
+            int? milestone;
+
+            if (SelectedMilestone == null || SelectedMilestone.Title == "No Milestone") milestone = null;
+            else milestone = SelectedMilestone.Number;
+
+            string[] selectedLabels = Labels.Where(l => l.IsChecked).Select(l => l.Name).ToArray();
+
             var result = new Issue();
 
             try
             {
-                result = githubRepository.CreateIssue(User.Login, SelectedProject.Name, Title, Body, assigned, null, null).Result;
+                result = githubRepository.CreateIssue(User.Login, SelectedProject.Name, Title, Body, assigned, milestone, selectedLabels).Result;
             }
             catch (Exception ex)
             {

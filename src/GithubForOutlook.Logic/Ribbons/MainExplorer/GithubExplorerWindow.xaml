@@ -27,7 +27,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                            <Border x:Name="RepoBorder" Margin="-2, 2, 0, 2" Padding="2,0,2,0" Height="48" Background="#FFEEEEEE" HorizontalAlignment="Stretch" VerticalAlignment="Center" SnapsToDevicePixels="True" IsEnabled="True">
+                            <Border x:Name="RepoBorder" Margin="-2, 1, 0, 1" Padding="2,0,2,0" Height="48" Background="#FFEEEEEE" HorizontalAlignment="Stretch" VerticalAlignment="Center" SnapsToDevicePixels="True" IsEnabled="True">
                                 <ContentPresenter />
                             </Border>
                             <ControlTemplate.Triggers>
@@ -53,7 +53,7 @@
             <Image Source="{Binding User.AvatarUrl}" Height="32" Width="32" VerticalAlignment="Center" HorizontalAlignment="Left" />
             <TextBlock Margin="5,0,0,0" Text="{Binding User.Login}" Foreground="#FF666666" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" />
         </StackPanel>
-        
+
         <ListBox  x:Name="Repositories"
                   Grid.Column="0"
                   Grid.Row="1"
@@ -72,27 +72,29 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <Grid Grid.Column="1" Grid.Row="1"  Margin="40, 0, 0, 0">
+        <Grid Grid.Column="1" Grid.Row="1"  Margin="37,0,3,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="90" />
+                <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="200" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="80" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
+                <RowDefinition />
+                <RowDefinition Height="30" />
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF666666" FontSize="18" Text="Issue:" />
-            <TextBox Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" FontSize="18" Text="{Binding Title}" HorizontalAlignment="Stretch" Foreground="Black" />
+            <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,0,10" FontSize="18" Text="{Binding Title}" HorizontalAlignment="Stretch" Foreground="Black" />
 
             <TextBlock Grid.Row="1" Grid.Column="0" Foreground="#FF666666" FontSize="18" Text="Details:" />
-            <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,10" Text="{Binding Body}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Foreground="Black" />
+            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,0,10" Text="{Binding Body}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Foreground="Black" />
 
             <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF666666" FontSize="18" Text="Assigned:" />
-            <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,10" Width="300" FontSize="18" x:Name="UsersCombo" SelectedItem="{Binding AssignedUser}" DisplayMemberPath="Login" Foreground="Black" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <ComboBox Grid.Row="2" Grid.Column="1" FontSize="18" x:Name="UsersCombo" SelectedItem="{Binding AssignedUser}" DisplayMemberPath="Login" Foreground="Black" HorizontalAlignment="Stretch" VerticalAlignment="Center">
                 <ComboBox.Style>
                     <Style TargetType="ComboBox">
                         <Style.Triggers>
@@ -104,7 +106,47 @@
                 </ComboBox.Style>
             </ComboBox>
 
-            <Button Grid.Row="3" Grid.Column="1" Width="100" HorizontalAlignment="Right" Content="Create" Click="CreateIssue_Click">
+            <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF666666" FontSize="18" Text="Milestone:" />
+            <ComboBox Grid.Row="3" Grid.Column="1" FontSize="18" x:Name="MilestoneCombo" SelectedItem="{Binding SelectedMilestone}" DisplayMemberPath="Title" Foreground="Black" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                <ComboBox.Style>
+                    <Style TargetType="ComboBox">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=SelectedItem, ElementName=Repositories}"  Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ComboBox.Style>
+            </ComboBox>
+
+            <ListView x:Name="IssuesBox"
+                      ItemsSource="{Binding Labels}"
+                      Grid.Column="3"
+                      Grid.Row="2"
+                      Grid.RowSpan="3"
+                      BorderThickness="0"
+                      BorderBrush="Transparent"
+                      Padding="0"
+                      SnapsToDevicePixels="True"
+                      Margin="3,0,0,10">
+                <ListBox.Style>
+                    <Style TargetType="ListBox">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=SelectedItem, ElementName=Repositories}"  Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.Style>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox IsChecked="{Binding IsChecked}" HorizontalAlignment="Stretch" Content="{Binding Name}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListView>
+
+
+            <Button Grid.Row="5" Grid.Column="2" Width="100" HorizontalAlignment="Right" Content="Create" Click="CreateIssue_Click">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Style.Triggers>
@@ -115,7 +157,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="4" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+            <StackPanel Orientation="Vertical" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" VerticalAlignment="Bottom" HorizontalAlignment="Center">
                 <TextBlock x:Name="ResultText" FontSize="18" HorizontalAlignment="Left" />
             </StackPanel>
         </Grid>

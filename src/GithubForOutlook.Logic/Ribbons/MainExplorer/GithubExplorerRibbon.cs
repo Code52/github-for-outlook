@@ -22,13 +22,11 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
     {
         private readonly SettingsViewModel settings;
         private readonly TasksViewModel tasks;
-        private readonly IOutlookRepository outlookRepository;
 
-        public GithubExplorerRibbon(SettingsViewModel settings, TasksViewModel tasks, IOutlookRepository outlookRepository)
+        public GithubExplorerRibbon(SettingsViewModel settings, TasksViewModel tasks)
         {
             this.settings = settings;
             this.tasks = tasks;
-            this.outlookRepository = outlookRepository;
         }
 
         private Explorer explorer;

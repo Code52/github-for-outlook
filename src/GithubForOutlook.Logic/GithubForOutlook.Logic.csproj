@@ -56,7 +56,7 @@
       <HintPath>..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NGitHub, Version=0.5.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NGitHub.1.0.0.8\lib\net40\NGitHub.dll</HintPath>
+      <HintPath>..\packages\NGitHub.1.0.0.10\lib\net40\NGitHub.dll</HintPath>
     </Reference>
     <Reference Include="Office, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -100,6 +100,7 @@
     <Compile Include="Helpers\ValidationResult.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\GithubIssue.cs" />
+    <Compile Include="Models\SelectionLabel.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Modules\Notifications\NotificationsViewModel.cs" />
     <Compile Include="Modules\Settings\SettingsViewModel.cs" />

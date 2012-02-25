@@ -11,14 +11,14 @@ namespace GithubForOutlook.Logic.Repositories.Interfaces
     {
         Task<User> GetUser();
         Task<IEnumerable<User>> GetOrganisations(string username, int page = 0);
-        Task<IEnumerable<Repository>> GetProjects(NGitHub.Models.User user, int page = 0);
+        Task<IEnumerable<Repository>> GetProjects(string username, int page = 0);
 
         Task<Issue> CreateIssue(string username, string reponame, string title, string body, string assigneename,
-                                       string milestone, string[] labels);
+                                       int? milestone, string[] labels);
 
         Task<IEnumerable<Issue>> GetIssues(string username, string reponame, State state = State.Open, int page = 0);
 
-        Task<IEnumerable<User>> GetOrganisationUsers(User user, int page = 0);
+        Task<IEnumerable<User>> GetOrganisationUsers(string username, int page = 0);
 
         Task<IEnumerable<Label>> GetLabels(string username, string reponame);
 

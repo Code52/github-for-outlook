@@ -18,16 +18,12 @@ namespace GithubForOutlook.Logic.Ribbons.Email
     {
         private readonly SettingsViewModel settings;
         private readonly TasksViewModel tasks;
-        private readonly IOutlookRepository outlookRepository;
 
-        public GithubMailItem(SettingsViewModel settings, TasksViewModel tasks, IOutlookRepository outlookRepository)
+        public GithubMailItem(SettingsViewModel settings, TasksViewModel tasks)
         {
             this.settings = settings;
             this.tasks = tasks;
-            this.outlookRepository = outlookRepository;
         }
-
-
 
         private MailItem mailItem;
 

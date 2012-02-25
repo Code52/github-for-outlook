@@ -39,18 +39,18 @@ namespace GithubForOutlook.Logic.Repositories
             return NGitHub<IEnumerable<User>, string, int>(client.Organizations.GetOrganizationsAsync, username, page);
         }
 
-        public Task<IEnumerable<Repository>> GetProjects(NGitHub.Models.User user, int page = 0)
+        public Task<IEnumerable<Repository>> GetProjects(string username, int page = 0)
         {
             //if (user.IsOrganisation)
             //    return NGitHub<IEnumerable<Repository>, string, int, RepositoryTypes>(_client.Organizations., user.Username, page, RepositoryTypes.Member);
             //else
-            return NGitHub<IEnumerable<Repository>, string, int, RepositoryTypes>(client.Repositories.GetRepositoriesAsync, user.Login, page, RepositoryTypes.All);
+            return NGitHub<IEnumerable<Repository>, string, int, RepositoryTypes>(client.Repositories.GetRepositoriesAsync, username, page, RepositoryTypes.All);
         }
 
         public Task<Issue> CreateIssue(string username, string reponame, string title, string body, string assigneename,
-                                string milestone, string[] labels)
+                                int? milestone, string[] labels)
         {
-            return NGitHub<Issue, string, string, string, string, string, string, string[]>(client.Issues.CreateIssueAsync, username, reponame, title, body, assigneename, milestone, labels);
+            return NGitHub<Issue, string, string, string, string, string, int?, string[]>(client.Issues.CreateIssueAsync, username, reponame, title, body, assigneename, milestone, labels);
         }
 
         public Task<IEnumerable<Issue>> GetIssues(string username, string reponame, State state = State.Open,
@@ -60,9 +60,9 @@ namespace GithubForOutlook.Logic.Repositories
                                                                            reponame, state, page);
         }
 
-        public Task<IEnumerable<User>> GetOrganisationUsers(NGitHub.Models.User user, int page = 0)
+        public Task<IEnumerable<User>> GetOrganisationUsers(string username, int page = 0)
         {
-            return NGitHub<IEnumerable<User>, string, int>(client.Organizations.GetMembersAsync, user.Login, page);
+            return NGitHub<IEnumerable<User>, string, int>(client.Organizations.GetMembersAsync, username, page);
         }
 
         public Task<IEnumerable<Label>> GetLabels(string username, string reponame)

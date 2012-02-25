@@ -44,6 +44,11 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
 
             UsersCombo.ItemsSource = null;
             UsersCombo.ItemsSource = dc.GetOrganisationUsers(selected);
+
+            MilestoneCombo.ItemsSource = null;
+            MilestoneCombo.ItemsSource = dc.GetMilestones(selected);
+
+            dc.SetLabels();
         }
     }
 }
