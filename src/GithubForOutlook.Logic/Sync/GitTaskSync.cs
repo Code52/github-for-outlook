@@ -8,7 +8,7 @@ namespace GithubForOutlook.Logic.Sync
     {
         public void Synchronise()
         {
-            var syncService = new GenericSynchronisationService<IGithubIssue, int>(
+            var syncService = new GenericSynchronisationService<IGithubIssue, string>(
                 i=>i.Id,
                 new OutlookSyncProvider(),
                 new GithubSyncProvider(),
@@ -45,14 +45,14 @@ namespace GithubForOutlook.Logic.Sync
     //and killing outlooks perf while the sync happens
     //
 
-    public class GithubSyncProvider : ISynchronisationProvider<IGithubIssue, int>
+    public class GithubSyncProvider : ISynchronisationProvider<IGithubIssue, string>
     {
         public IEnumerable<IGithubIssue> GetModifiedEntries(DateTime? lastSync)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<int> GetDeletedEntries(DateTime? lastSync)
+        public IEnumerable<string> GetDeletedEntries(DateTime? lastSync)
         {
             throw new NotImplementedException();
         }
@@ -62,20 +62,20 @@ namespace GithubForOutlook.Logic.Sync
             throw new NotImplementedException();
         }
 
-        public void DeleteEntries(IEnumerable<int> keys)
+        public void DeleteEntries(IEnumerable<string> keys)
         {
             throw new NotImplementedException();
         }
     }
 
-    public class OutlookSyncProvider : ISynchronisationProvider<IGithubIssue, int>
+    public class OutlookSyncProvider : ISynchronisationProvider<IGithubIssue, string>
     {
         public IEnumerable<IGithubIssue> GetModifiedEntries(DateTime? lastSync)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<int> GetDeletedEntries(DateTime? lastSync)
+        public IEnumerable<string> GetDeletedEntries(DateTime? lastSync)
         {
             throw new NotImplementedException();
         }
@@ -85,7 +85,7 @@ namespace GithubForOutlook.Logic.Sync
             throw new NotImplementedException();
         }
 
-        public void DeleteEntries(IEnumerable<int> keys)
+        public void DeleteEntries(IEnumerable<string> keys)
         {
             throw new NotImplementedException();
         }
@@ -93,6 +93,6 @@ namespace GithubForOutlook.Logic.Sync
 
     public interface IGithubIssue
     {
-        int Id { get; set; }
+        string Id { get; set; }
     }
 }

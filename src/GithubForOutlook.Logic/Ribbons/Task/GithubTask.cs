@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Windows;
+using GithubForOutlook.Logic.Modules.Notifications;
+using GithubForOutlook.Logic.Modules.Settings;
+using GithubForOutlook.Logic.Modules.Tasks;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Outlook;
 using VSTOContrib.Core.RibbonFactory;
@@ -8,14 +11,22 @@ using VSTOContrib.Core.RibbonFactory.Internal;
 using VSTOContrib.Core.Wpf;
 using VSTOContrib.Outlook.RibbonFactory;
 
-namespace GithubForOutlook.Logic.Ribbons
+namespace GithubForOutlook.Logic.Ribbons.Task
 {
     [RibbonViewModel(OutlookRibbonType.OutlookTask)]
     public class GithubTask : OfficeViewModelBase, IRibbonViewModel, IRegisterCustomTaskPane
     {
+        
         private bool panelShown;
         private ICustomTaskPaneWrapper githubTaskPane;
         private GithubTaskAdapter githubIssue;
+
+        public GithubTask(TasksViewModel tasks, NotificationsViewModel notifications, SettingsViewModel settings)
+        {
+            Tasks = tasks;
+            Notifications = notifications;
+            Settings = settings;
+        }
 
         public void Initialised(object context)
         {
@@ -27,12 +38,16 @@ namespace GithubForOutlook.Logic.Ribbons
         {
         }
 
+        public TasksViewModel Tasks { get; private set; }
+        public NotificationsViewModel Notifications { get; private set; }
+        public SettingsViewModel Settings { get; private set; }
+
         public bool IsGithubTask
         {
             get { return githubIssue.IsGithubTask; }
             private set
             {
-                githubIssue.IsGithubTask = value;
+                //githubIssue.IsGithubTask = value;
                 RaisePropertyChanged(() => IsGithubTask);
             }
         }

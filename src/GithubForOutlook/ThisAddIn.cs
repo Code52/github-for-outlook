@@ -26,7 +26,7 @@ namespace GithubForOutlook
 
         private void InternalStartup()
         {
-            core = new AddinBootstrapper();
+            core = new AddinBootstrapper(Application.Session);
             OutlookRibbonFactory.SetApplication(Application);
             RibbonFactory.Current.InitialiseFactory(
                 t => (IRibbonViewModel)core.Resolve(t),
