@@ -8,6 +8,7 @@ using NGitHub.Models;
 using VSTOContrib.Core.Wpf;
 using Exception = System.Exception;
 using User = NGitHub.Models.User;
+using Repository = NGitHub.Models.Repository;
 
 namespace GithubForOutlook.Logic.Modules.Tasks
 {
@@ -25,9 +26,8 @@ namespace GithubForOutlook.Logic.Modules.Tasks
             get { return githubRepository; }
         }
 
-        public void Login(string username, string password)
+        public void Login()
         {
-            githubRepository.Login(username, password);
             User = githubRepository.GetUser().Result;
         }
 

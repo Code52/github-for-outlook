@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using GithubForOutlook.Logic.Modules.Settings;
 using GithubForOutlook.Logic.Modules.Tasks;
 using GithubForOutlook.Logic.Ribbons.MainExplorer;
 using Microsoft.Office.Core;
@@ -14,12 +13,10 @@ namespace GithubForOutlook.Logic.Ribbons.Email
     [RibbonViewModel(OutlookRibbonType.OutlookMailRead)]
     public class GithubMailItem : OfficeViewModelBase, IRibbonViewModel
     {
-        private readonly SettingsViewModel settings;
         private readonly TasksViewModel tasks;
 
-        public GithubMailItem(SettingsViewModel settings, TasksViewModel tasks)
+        public GithubMailItem(TasksViewModel tasks)
         {
-            this.settings = settings;
             this.tasks = tasks;
         }
 
@@ -44,7 +41,7 @@ namespace GithubForOutlook.Logic.Ribbons.Email
             if (mailItem == null) return;
 
             if (tasks.User == null)
-                tasks.Login(settings.UserName, settings.Password);
+                tasks.Login();
 
             tasks.Title = mailItem.Subject;
             tasks.Sender = mailItem.Sender.Name;

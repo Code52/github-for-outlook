@@ -20,7 +20,5 @@ namespace GithubForOutlook.Logic.Repositories.Interfaces
         Task<IEnumerable<Label>> GetLabels(string username, string reponame);
 
         Task<IEnumerable<Milestone>> GetMilestones(string username, string reponame);
-
-        void Login(string username, string password);
     }
 }

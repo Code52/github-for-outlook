@@ -1,6 +1,8 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using GithubForOutlook.Logic.Modules.Settings;
 using GithubForOutlook.Logic.Modules.Tasks;
+using GithubForOutlook.Logic.Ribbons.Settings;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Outlook;
 using VSTOContrib.Core.RibbonFactory;
@@ -14,12 +16,12 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
     [RibbonViewModel(OutlookRibbonType.OutlookExplorer)]
     public class GithubExplorerRibbon : OfficeViewModelBase, IRibbonViewModel
     {
-        private readonly SettingsViewModel settings;
-        private readonly TasksViewModel tasks;
+        readonly Func<SettingsViewModel> getSettingsViewModel;
+        readonly TasksViewModel tasks;
 
-        public GithubExplorerRibbon(SettingsViewModel settings, TasksViewModel tasks)
+        public GithubExplorerRibbon(Func<SettingsViewModel> getSettingsViewModel, TasksViewModel tasks)
         {
-            this.settings = settings;
+            this.getSettingsViewModel = getSettingsViewModel;
             this.tasks = tasks;
         }
 
@@ -28,7 +30,6 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
         public void Initialised(object context)
         {
         }
-
 
         private void CleanupFolder()
         {
@@ -42,7 +43,7 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
             if (selectedMailItem == null) return;
             
             if(tasks.User == null)
-                tasks.Login(settings.UserName, settings.Password);
+                tasks.Login();
 
             tasks.Title = selectedMailItem.Subject;
             tasks.Sender = selectedMailItem.Sender.Name;
@@ -54,6 +55,14 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
                                         selectedMailItem.Body);
 
             new GithubExplorerWindow(tasks).Show();
+        }
+
+        public void ShowSettings(IRibbonControl ribbonControl)
+        {
+            var viewModel = getSettingsViewModel();
+
+            var window = new GithubSettingsWindow { DataContext = viewModel };
+            window.Show();
         }
 
         public void CurrentViewChanged(object currentView)

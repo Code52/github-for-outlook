@@ -10,6 +10,7 @@ using GithubForOutlook.Logic.Ribbons.Task;
 using Microsoft.Office.Interop.Outlook;
 using NGitHub;
 using NGitHub.Authentication;
+using RestSharp;
 using VSTOContrib.Core.RibbonFactory.Interfaces;
 
 namespace GithubForOutlook.Logic
@@ -35,32 +36,50 @@ namespace GithubForOutlook.Logic
                             .Where(t => t.Name.EndsWith("ViewModel"))
                             .AsSelf();
 
-            containerBuilder.RegisterType<GitHubOAuthAuthorizer>()
-                            .AsImplementedInterfaces();
-            containerBuilder.RegisterType<GitHubClient>()
-                            .AsImplementedInterfaces();
-
             containerBuilder.Register(c => nameSpace).SingleInstance();
 
             var settingsService = new SettingsService();
             ApplicationSettings settings;
             if (!settingsService.ContainsKey("Settings"))
             {
-                settings = new ApplicationSettings { UserName = "code52testing", Password = "code52test123" };    
+                settings = new ApplicationSettings { UserName = "code52testing", Password = "code52test123" };
+                settingsService.Set("client", "9e96382c3109d9f35371");
+                settingsService.Set("secret", "60d6c49b946ba4ddc52a34aa0dc1cf43e6077ba6");
+                settingsService.Set("redirect", "http://code52.org");
                 settingsService.Set("Settings", settings);
+                settingsService.Save();
             }
             else
             {
                 settings = settingsService.Get<ApplicationSettings>("Settings");
             }
-            
+
             containerBuilder.Register(c => settings)
-                            .SingleInstance();
+                .SingleInstance();
 
             containerBuilder.RegisterInstance(settingsService)
                             .AsImplementedInterfaces()
                             .SingleInstance();
 
+            IAuthenticator authenticator;
+            if (!string.IsNullOrWhiteSpace(settings.AccessToken))
+            {
+                authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(settings.AccessToken);
+            }
+            else
+            {
+                authenticator = new HttpBasicAuthenticator(settings.UserName, settings.Password);
+            }
+
+            containerBuilder.RegisterInstance(authenticator)
+                            .SingleInstance();
+
+            containerBuilder.RegisterType<GitHubOAuthAuthorizer>()
+                            .AsImplementedInterfaces();
+
+            containerBuilder.RegisterType<GitHubClient>()
+                            .AsImplementedInterfaces()
+                            .PropertiesAutowired();
 
             containerBuilder.RegisterType<OutlookDispatchingRepository>()
                 .As<IOutlookRepository>();
