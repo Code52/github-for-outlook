@@ -20,26 +20,21 @@ namespace GithubForOutlook.Logic.Modules.Tasks
         {
             GithubRepository = githubRepository;
 
-            Users = new ObservableCollectionEx<User>();
-            Milestones = new ObservableCollectionEx<Milestone>();
-            Labels = new ObservableCollectionEx<SelectionLabel>();
-            Projects = new ObservableCollectionEx<Repository>();
+            Users = new ObservableCollection<User>();
+            Milestones = new ObservableCollection<Milestone>();
+            Labels = new ObservableCollection<SelectionLabel>();
+            Projects = new ObservableCollection<Repository>();
         }
 
         public User User { get; set; }
 
-        private ObservableCollectionEx<Repository> projects;
-        public ObservableCollectionEx<Repository> Projects
-        {
-            get { return projects; }
-            set { projects = value; }
-        }
+        public ObservableCollection<Repository> Projects { get; set; }
 
-        public ObservableCollectionEx<User> Users { get; set; }
+        public ObservableCollection<User> Users { get; set; }
 
-        public ObservableCollectionEx<Milestone> Milestones { get; set; }
+        public ObservableCollection<Milestone> Milestones { get; set; }
 
-        public ObservableCollectionEx<SelectionLabel> Labels { get; set; }
+        public ObservableCollection<SelectionLabel> Labels { get; set; }
 
         public IGithubRepository GithubRepository { get; private set; }
 
