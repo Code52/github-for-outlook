@@ -69,6 +69,12 @@ namespace Analects.SettingsService
             using (IsolatedStorageFile isoStore = IsolatedStorageFile.GetStore(scope, null, null))
             using (var stream = new IsolatedStorageFileStream(filename, FileMode.Create, isoStore))
                 formatter.Serialize(stream, storage);
+
+        }
+
+        public void Clear()
+        {
+            storage.Clear();
         }
     }
 }

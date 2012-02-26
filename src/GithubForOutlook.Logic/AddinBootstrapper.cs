@@ -39,6 +39,7 @@ namespace GithubForOutlook.Logic
 
             var settingsService = new SettingsService();
             ApplicationSettings settings;
+            // settingsService.Clear(); // uncomment this for testing
             if (!settingsService.ContainsKey("Settings"))
             {
                 // NOTE - we can get away without doing basic auth, but i'll leave this here for the moment
