@@ -1,6 +1,6 @@
 using System;
 
-namespace GithubForOutlook.TestsCore
+namespace GithubForOutlook.Tests
 {
     public class AddinBootstrapper2 : IDisposable
     {

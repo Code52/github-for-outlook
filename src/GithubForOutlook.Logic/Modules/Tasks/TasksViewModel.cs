@@ -1,11 +1,9 @@
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using GithubForOutlook.Logic.Models;
 using GithubForOutlook.Logic.Repositories.Interfaces;
-using Microsoft.Office.Interop.Outlook;
 using NGitHub.Models;
 using VSTOContrib.Core.Wpf;
 using Exception = System.Exception;

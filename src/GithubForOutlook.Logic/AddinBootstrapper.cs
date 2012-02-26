@@ -4,9 +4,9 @@ using Autofac;
 using GithubForOutlook.Logic.Models;
 using GithubForOutlook.Logic.Repositories;
 using GithubForOutlook.Logic.Repositories.Interfaces;
-using GithubForOutlook.Logic.Ribbons.Task;
 using GithubForOutlook.Logic.Ribbons.Email;
 using GithubForOutlook.Logic.Ribbons.MainExplorer;
+using GithubForOutlook.Logic.Ribbons.Task;
 using Microsoft.Office.Interop.Outlook;
 using NGitHub;
 using NGitHub.Authentication;
@@ -32,8 +32,8 @@ namespace GithubForOutlook.Logic
             var assembly = typeof (GithubTask).Assembly;
 
             containerBuilder.RegisterAssemblyTypes(assembly)
-                .Where(t => t.Name.EndsWith("ViewModel"))
-                .AsSelf();
+                            .Where(t => t.Name.EndsWith("ViewModel"))
+                            .AsSelf();
 
             containerBuilder.RegisterType<GitHubOAuthAuthorizer>()
                             .AsImplementedInterfaces();
@@ -41,14 +41,26 @@ namespace GithubForOutlook.Logic
                             .AsImplementedInterfaces();
 
             containerBuilder.Register(c => nameSpace).SingleInstance();
+
+            var settingsService = new SettingsService();
+            ApplicationSettings settings;
+            if (!settingsService.ContainsKey("Settings"))
+            {
+                settings = new ApplicationSettings { UserName = "code52testing", Password = "code52test123" };    
+                settingsService.Set("Settings", settings);
+            }
+            else
+            {
+                settings = settingsService.Get<ApplicationSettings>("Settings");
+            }
             
-            containerBuilder.RegisterType<SettingsService>().As<ISettingsService>().SingleInstance();
+            containerBuilder.Register(c => settings)
+                            .SingleInstance();
 
-            var sservice = new SettingsService();
-            var settings = sservice.Get<ApplicationSettings>("Settings");
-            if(settings == null) settings = new ApplicationSettings() { UserName = "code52testing", Password = "code52test123"};
+            containerBuilder.RegisterInstance(settingsService)
+                            .AsImplementedInterfaces()
+                            .SingleInstance();
 
-            containerBuilder.Register(c => settings).SingleInstance();
 
             containerBuilder.RegisterType<OutlookDispatchingRepository>()
                 .As<IOutlookRepository>();

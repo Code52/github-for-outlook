@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using GithubForOutlook.Logic.Repositories.Interfaces;
 using NGitHub;
 using NGitHub.Models;
-using NGitHub.Services;
-using NGitHub.Web;
 using RestSharp;
 
 namespace GithubForOutlook.Logic.Repositories
@@ -15,17 +11,12 @@ namespace GithubForOutlook.Logic.Repositories
     public class GithubRepository : IGithubRepository
     {
         private GitHubClient client;
-        private readonly Action<GitHubException> _exceptionAction = ex => Console.WriteLine("Error: " + Enum.GetName(typeof(ErrorType), ex.ErrorType), "");
 
-        private string _password;
-        private string _username;
         public void Login(string username, string password)
         {
-            _username = username;
-            _password = password;
             client = new GitHubClient
             {
-                Authenticator = new HttpBasicAuthenticator(_username, _password)
+                Authenticator = new HttpBasicAuthenticator(username, password)
             };
         }
 
@@ -81,14 +72,6 @@ namespace GithubForOutlook.Logic.Repositories
         {
             var completionSource = new TaskCompletionSource<T>();
             call(completionSource.SetResult, completionSource.SetException);
-            return completionSource.Task;
-        }
-
-        private Task<T> NGitHub<T, TArg>(Func<TArg, Action<T>, Action<Exception>, GitHubRequestAsyncHandle> call,
-                                         TArg t1)
-        {
-            var completionSource = new TaskCompletionSource<T>();
-            call(t1, completionSource.SetResult, completionSource.SetException);
             return completionSource.Task;
         }
 

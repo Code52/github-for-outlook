@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using VSTOContrib.Core.Wpf;
 
 namespace GithubForOutlook.Logic.Models

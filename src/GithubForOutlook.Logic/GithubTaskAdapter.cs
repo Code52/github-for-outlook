@@ -38,11 +38,11 @@ namespace GithubForOutlook.Logic
         {
             get
             {
-                return outlookTask.GetPropertyValue(Githubissueid, OlUserPropertyType.olText, false, (o) => o.ToString(), null);
+                return outlookTask.GetPropertyValue(Githubissueid, OlUserPropertyType.olText, false, o => o.ToString(), null);
             }
             set
             {
-                outlookTask.SetPropertyValue(Githubissueid, OlUserPropertyType.olText, value.ToString(), true);
+                outlookTask.SetPropertyValue(Githubissueid, OlUserPropertyType.olText, value, true);
             }
         }
 

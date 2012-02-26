@@ -1,8 +1,6 @@
 ﻿using System.Globalization;
-using System.Windows;
 using GithubForOutlook.Logic.Modules.Settings;
 using GithubForOutlook.Logic.Modules.Tasks;
-using GithubForOutlook.Logic.Repositories.Interfaces;
 using GithubForOutlook.Logic.Ribbons.MainExplorer;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Outlook;

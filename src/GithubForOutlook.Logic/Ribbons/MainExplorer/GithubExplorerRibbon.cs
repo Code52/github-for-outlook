@@ -1,11 +1,6 @@
 ﻿using System.Globalization;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using GithubForOutlook.Logic.Models;
 using GithubForOutlook.Logic.Modules.Settings;
 using GithubForOutlook.Logic.Modules.Tasks;
-using GithubForOutlook.Logic.Repositories.Interfaces;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Outlook;
 using VSTOContrib.Core.RibbonFactory;
@@ -13,7 +8,6 @@ using VSTOContrib.Core.RibbonFactory.Interfaces;
 using VSTOContrib.Core.Wpf;
 using VSTOContrib.Outlook.RibbonFactory;
 using VSTOContrib.Core.Extensions;
-using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace GithubForOutlook.Logic.Ribbons.MainExplorer
 {
