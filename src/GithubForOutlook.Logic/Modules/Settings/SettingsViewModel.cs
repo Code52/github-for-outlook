@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.Windows.Input;
 using Analects.SettingsService;
 using GithubForOutlook.Logic.Models;
+using Newtonsoft.Json;
 using NGitHub;
 using NGitHub.Authentication;
-using Newtonsoft.Json;
 using RestSharp;
 using VSTOContrib.Core.Wpf;
 
@@ -68,19 +68,6 @@ namespace GithubForOutlook.Logic.Modules.Settings
             }
         }
 
-        public ICommand SignInCommand { get { return new DelegateCommand(SignIn); } }
-
-        public void SignIn()
-        {
-            // TODO: settings provider
-            // TODO: landing page at Code52 to get user to paste auth credentials in
-
-            var url = authorizer.BuildAuthenticationUrl(settingsService.Get<string>("client"), settingsService.Get<string>("redirect"));
-            Process.Start(url);
-
-            ShowAuthenticateButton = true;
-        }
-
         public bool ShowAuthenticateButton
         {
             get { return showAuthenticateButton; }
@@ -90,6 +77,18 @@ namespace GithubForOutlook.Logic.Modules.Settings
                 RaisePropertyChanged(() => ShowAuthenticateButton);
                 AuthenticateCommand.RaiseCanExecuteChanged();
             }
+        }
+
+        public ICommand SignInCommand { get { return new DelegateCommand(SignIn); } }
+
+        public void SignIn()
+        {
+            // TODO: landing page at Code52 to get user to paste auth credentials in
+
+            var url = authorizer.BuildAuthenticationUrl(settingsService.Get<string>("client"), settingsService.Get<string>("redirect"));
+            Process.Start(url);
+
+            ShowAuthenticateButton = true;
         }
 
         public DelegateCommand AuthenticateCommand { get { return new DelegateCommand(Authenticate, CanAuthenticate); } }

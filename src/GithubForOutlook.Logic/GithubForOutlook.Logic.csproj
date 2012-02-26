@@ -100,7 +100,6 @@
     <Compile Include="Helpers\ValidationResult.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\GithubIssue.cs" />
-    <Compile Include="Models\Repository.cs" />
     <Compile Include="Models\SelectionLabel.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Modules\Notifications\NotificationsViewModel.cs" />
