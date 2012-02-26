@@ -107,6 +107,9 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 
         public void GetOrganisationUsers(Repository repository)
         {
+            Users.Clear();
+            Users.Add(new User { Login = "No User", Name = "No User" });
+
             if (repository.Owner.IsOrganization)
             {
                 GithubRepository
@@ -120,16 +123,13 @@ namespace GithubForOutlook.Logic.Modules.Tasks
             }
             else
             {
-                Users.Clear();
                 Users.Add(repository.Owner);
             }
         }
 
         private void PopulateUsers(IEnumerable<User> result)
         {
-            Users.Clear();
-            Users.Add(new User { Login = "No User", Name = "No User" });
-
+          
             foreach (var u in result)
             {
                 Users.Add(u);
