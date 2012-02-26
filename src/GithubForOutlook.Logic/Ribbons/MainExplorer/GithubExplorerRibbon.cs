@@ -1,6 +1,8 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using GithubForOutlook.Logic.Modules.Settings;
 using GithubForOutlook.Logic.Modules.Tasks;
+using GithubForOutlook.Logic.Ribbons.Settings;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Outlook;
 using VSTOContrib.Core.RibbonFactory;
@@ -14,12 +16,13 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
     [RibbonViewModel(OutlookRibbonType.OutlookExplorer)]
     public class GithubExplorerRibbon : OfficeViewModelBase, IRibbonViewModel
     {
-        private readonly SettingsViewModel settings;
-        private readonly TasksViewModel tasks;
+        readonly Func<SettingsViewModel> getSettingsViewModel;
+        readonly TasksViewModel tasks;
 
-        public GithubExplorerRibbon(SettingsViewModel settings, TasksViewModel tasks)
+        public GithubExplorerRibbon(
+            Func<SettingsViewModel> getSettingsViewModel, TasksViewModel tasks)
         {
-            this.settings = settings;
+            this.getSettingsViewModel = getSettingsViewModel;
             this.tasks = tasks;
         }
 
@@ -28,7 +31,6 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
         public void Initialised(object context)
         {
         }
-
 
         private void CleanupFolder()
         {
@@ -40,20 +42,27 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
             //TODO create proper task window and show it here.. selectedMailItem will be populated properly
 
             if (selectedMailItem == null) return;
-            
-            if(tasks.User == null)
-                tasks.Login(settings.UserName, settings.Password);
+
+            tasks.Login();
 
             tasks.Title = selectedMailItem.Subject;
             tasks.Sender = selectedMailItem.Sender.Name;
             tasks.ReceivedDate = selectedMailItem.ReceivedTime;
-            tasks.Body = string.Format("Sender: {0} <{1}>\nReceived: {2}\n\n{3}", 
+            tasks.Body = string.Format("Sender: {0} <{1}>\nReceived: {2}\n\n{3}",
                                         selectedMailItem.Sender.Name,
                                         selectedMailItem.Sender.Address,
                                         selectedMailItem.ReceivedTime.ToString(CultureInfo.CurrentCulture),
                                         selectedMailItem.Body);
 
             new GithubExplorerWindow(tasks).Show();
+        }
+
+        public void ShowSettings(IRibbonControl ribbonControl)
+        {
+            var viewModel = getSettingsViewModel();
+
+            var window = new GithubSettingsWindow { DataContext = viewModel };
+            window.Show();
         }
 
         public void CurrentViewChanged(object currentView)
@@ -108,7 +117,7 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
             set
             {
                 mailItemSelected = value;
-                RaisePropertyChanged(()=>MailItemSelected);
+                RaisePropertyChanged(() => MailItemSelected);
             }
         }
 

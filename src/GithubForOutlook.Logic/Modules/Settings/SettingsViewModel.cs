@@ -1,6 +1,9 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Diagnostics;
+using System.Windows.Input;
 using Analects.SettingsService;
 using GithubForOutlook.Logic.Models;
+using Newtonsoft.Json;
 using NGitHub;
 using NGitHub.Authentication;
 using RestSharp;
@@ -12,53 +15,122 @@ namespace GithubForOutlook.Logic.Modules.Settings
 
     public class SettingsViewModel : OfficeViewModelBase
     {
-        private readonly ApplicationSettings settings;
-        private readonly ISettingsService settingsService;
+        readonly IGitHubOAuthAuthorizer authorizer;
+        readonly IGitHubClient client;
+        readonly ISettingsService settingsService;
+        readonly ApplicationSettings settings;
 
-        public SettingsViewModel(ApplicationSettings settings, ISettingsService settingsService)
+        public SettingsViewModel(
+            IGitHubOAuthAuthorizer authorizer, 
+            IGitHubClient client, 
+            ISettingsService settingsService, 
+            ApplicationSettings settings)
         {
-            this.settings = settings;
+            this.authorizer = authorizer;
+            this.client = client;
             this.settingsService = settingsService;
+            this.settings = settings;
+
+            if (!string.IsNullOrWhiteSpace(settings.UserName) )
+            {
+                User = new User
+                {
+                    Name = settings.UserName
+                };
+            }
         }
 
         public bool TrackIssues { get; set; }
 
         public bool TrackPullRequests { get; set; }
-
+        
         public User User { get; set; }
 
-        public string UserName
+        private bool showAuthenticateButton;
+        public bool ShowAuthenticateButton
         {
-            get { return settings.UserName; }
+            get { return showAuthenticateButton; }
             set
             {
-                settings.UserName = value;
-                RaisePropertyChanged(() => "UserName");
+                showAuthenticateButton = value;
+                RaisePropertyChanged(() => ShowAuthenticateButton);
+                AuthenticateCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public string Password
+        public ICommand SignInCommand { get { return new DelegateCommand(SignIn); } }
+
+        public void SignIn()
         {
-            get { return settings.Password; }
+            // TODO: landing page at Code52 to get user to paste auth credentials in
+
+            var url = authorizer.BuildAuthenticationUrl(settingsService.Get<string>("client"), settingsService.Get<string>("redirect"));
+            Process.Start(url);
+
+            ShowAuthenticateButton = true;
+        }
+
+        public DelegateCommand AuthenticateCommand { get { return new DelegateCommand(Authenticate, CanAuthenticate); } }
+
+        private bool CanAuthenticate()
+        {
+            return !string.IsNullOrWhiteSpace(AuthenticationSecret);
+        }
+
+        private string authenticationSecret;
+        public string AuthenticationSecret
+        {
+            get { return authenticationSecret; }
             set
             {
-                settings.Password = value;
-                RaisePropertyChanged(() => "Password");
+                authenticationSecret = value;
+                RaisePropertyChanged(() => AuthenticationSecret);
+                AuthenticateCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public void SaveSettings()
+        private void Authenticate()
         {
-            settingsService.Set("Settings", settings);
-            settingsService.Save();
+            var request = new RestRequest("https://github.com/login/oauth/access_token", Method.POST);
+
+            request.AddParameter("client_id", settingsService.Get<string>("client"));
+            request.AddParameter("redirect_uri", settingsService.Get<string>("redirect"));
+            request.AddParameter("client_secret", settingsService.Get<string>("secret"));
+            request.AddParameter("code", AuthenticationSecret);
+
+            var restClient = new RestClient();
+            restClient.ExecuteAsync(request, OnAuthenticateCompleted);
+        }
+
+        private void OnAuthenticateCompleted(RestResponse arg1, RestRequestAsyncHandle arg2)
+        {
+            try
+            {
+                var result = JsonConvert.DeserializeObject<dynamic>(arg1.Content);
+                string token = result.access_token;
+                settings.AccessToken = token;
+                settingsService.Save();
+                client.Authenticator = new OAuth2UriQueryParameterAuthenticator(token);
+                client.Users.GetAuthenticatedUserAsync(MapUser, LogError);
+            }
+            catch (Exception ex)
+            {
+                // TODO: notify that the code was not successful
+            }
+        }
+
+        private void LogError(GitHubException obj)
+        {
+
         }
 
         private void MapUser(NGitHub.Models.User obj)
         {
+            settings.UserName = obj.Login;
+            settingsService.Save();
             User = new User
             {
-                Name = obj.Name,
-                Icon = obj.AvatarUrl
+                Name = obj.Login,
             };
         }
 

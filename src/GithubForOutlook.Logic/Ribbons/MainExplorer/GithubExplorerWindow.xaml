@@ -64,7 +64,7 @@
                   ItemsSource="{Binding Projects}"
                   SelectedItem="{Binding SelectedProject}"
                   ItemContainerStyle="{StaticResource RepositoryItemContainer}"
-                  SelectionChanged="Repositories_SelectionChanged">
+                  SelectionChanged="RepositoriesSelectionChanged">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock FontSize="14" Padding="2,0,2,0" Foreground="#FF666666" Background="Transparent" Text="{Binding FullName}" HorizontalAlignment="Stretch" VerticalAlignment="Center" SnapsToDevicePixels="True" />
@@ -94,7 +94,9 @@
             <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,0,10" Text="{Binding Body}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Foreground="Black" />
 
             <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF666666" FontSize="18" Text="Assigned:" />
-            <ComboBox Grid.Row="2" Grid.Column="1" FontSize="18" x:Name="UsersCombo" SelectedItem="{Binding AssignedUser}" DisplayMemberPath="Login" Foreground="Black" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+            <ComboBox Grid.Row="2" Grid.Column="1" FontSize="18" x:Name="UsersCombo"
+                      ItemsSource="{Binding Users}"
+                      SelectedItem="{Binding AssignedUser}" DisplayMemberPath="Login" Foreground="Black" HorizontalAlignment="Stretch" VerticalAlignment="Center">
                 <ComboBox.Style>
                     <Style TargetType="ComboBox">
                         <Style.Triggers>
@@ -107,7 +109,9 @@
             </ComboBox>
 
             <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF666666" FontSize="18" Text="Milestone:" />
-            <ComboBox Grid.Row="3" Grid.Column="1" FontSize="18" x:Name="MilestoneCombo" SelectedItem="{Binding SelectedMilestone}" DisplayMemberPath="Title" Foreground="Black" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+            <ComboBox Grid.Row="3" Grid.Column="1" FontSize="18" x:Name="MilestoneCombo" 
+                      ItemsSource="{Binding Milestones}"
+                      SelectedItem="{Binding SelectedMilestone}" DisplayMemberPath="Title" Foreground="Black" HorizontalAlignment="Stretch" VerticalAlignment="Center">
                 <ComboBox.Style>
                     <Style TargetType="ComboBox">
                         <Style.Triggers>
@@ -146,7 +150,7 @@
             </ListView>
 
 
-            <Button Grid.Row="5" Grid.Column="2" Width="100" HorizontalAlignment="Right" Content="Create" Click="CreateIssue_Click">
+            <Button Grid.Row="5" Grid.Column="2" Width="100" HorizontalAlignment="Right" Content="Create" Click="CreateIssueClick">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Style.Triggers>

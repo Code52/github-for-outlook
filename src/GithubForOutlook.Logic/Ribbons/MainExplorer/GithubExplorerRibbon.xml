@@ -5,6 +5,7 @@
       <tab idMso="TabMail">
         <group id="githubGroup" label="GitHub">
           <button id="createTask" label="Create on Github" onAction="CreateIssue" getEnabled="MailItemSelected"/>
+          <button id="settings" label="Settings" onAction="ShowSettings" />
         </group>
       </tab>
     </tabs>

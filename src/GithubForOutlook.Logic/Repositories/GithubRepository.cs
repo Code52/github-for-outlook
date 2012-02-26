@@ -4,20 +4,16 @@ using System.Threading.Tasks;
 using GithubForOutlook.Logic.Repositories.Interfaces;
 using NGitHub;
 using NGitHub.Models;
-using RestSharp;
 
 namespace GithubForOutlook.Logic.Repositories
 {
     public class GithubRepository : IGithubRepository
     {
-        private GitHubClient client;
+        private readonly IGitHubClient client;
 
-        public void Login(string username, string password)
+        public GithubRepository(IGitHubClient client)
         {
-            client = new GitHubClient
-            {
-                Authenticator = new HttpBasicAuthenticator(username, password)
-            };
+            this.client = client;
         }
 
         public Task<User> GetUser()
