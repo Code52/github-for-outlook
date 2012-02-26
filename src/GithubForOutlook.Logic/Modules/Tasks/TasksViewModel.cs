@@ -30,81 +30,36 @@ namespace GithubForOutlook.Logic.Modules.Tasks
         public void Login()
         {
             var task = githubRepository.GetUser();
-            task.ContinueWith(t =>
-                                  {
-                                      if (t.Exception == null)
-                                      {
-                                          User = t.Result;
-                                      }
-                                  });
+            task.ContinueWith<IEnumerable<Repository>>(GetProjectsForUser)
+                .ContinueWith(AssignProjects);
+        }
+
+        private IEnumerable<Repository> GetProjectsForUser(Task<User> task)
+        {
+            if (task.Exception == null)
+                User = task.Result;
+
+            return githubRepository.GetProjects(User.Login).Result;
+        }
+
+        private void AssignProjects(Task<IEnumerable<Repository>> task)
+        {
+            Projects = task.Exception == null
+                        ? new ObservableCollection<Repository>(task.Result.Where(p => p.HasIssues))
+                        : new ObservableCollection<Repository>();
         }
 
         public User User { get; set; }
 
-        public IEnumerable<Repository> GetProjects()
+        private ObservableCollection<Repository> projects;
+        public ObservableCollection<Repository> Projects
         {
-            if (User == null) return new List<Repository>();
-
-            return githubRepository.GetProjects(User.Login).Result.Where(p => p.HasIssues);
-        }
-
-        private IEnumerable<Repository> projects;
-        public IEnumerable<Repository> Projects
-        {
-            get
+            get { return projects; }
+            set
             {
-                if (projects == null || !projects.Any())
-                    projects = GetProjects();
-
-                return projects;
+                projects = value;
+                RaisePropertyChanged(() => Projects);
             }
-        }
-
-        public IEnumerable<User> GetOrganisationUsers(Repository repository)
-        {
-            var list = new List<User> { new User { Login = "No User", Name = "No User" } };
-
-            if (repository.Owner.IsOrganization)
-            {
-                var result = GithubRepository.GetOrganisationUsers(repository.Owner.Login).Result;
-
-                list.AddRange(result);
-            }
-            else list.Add(repository.Owner);
-
-            return list;
-        }
-
-        public IEnumerable<Label> GetLabels(Repository repository)
-        {
-            var list = new List<Label>();
-
-            if (User == null || repository == null) return list;
-
-            if (repository.HasIssues)
-            {
-                var result = GithubRepository.GetLabels(repository.Owner.Login, repository.Name).Result;
-
-                list.AddRange(result);
-            }
-
-            return list;
-        }
-
-        public IEnumerable<Milestone> GetMilestones(Repository repository)
-        {
-            var list = new List<Milestone> { new Milestone { Title = "No Milestone" } };
-
-            if (User == null || repository == null) return list;
-
-            if (repository.HasIssues)
-            {
-                var result = GithubRepository.GetMilestones(repository.Owner.Login, repository.Name).Result;
-
-                list.AddRange(result);
-            }
-
-            return list;
         }
 
         public Dictionary<User, IEnumerable<User>> GetOrganisationUsers()
@@ -125,6 +80,73 @@ namespace GithubForOutlook.Logic.Modules.Tasks
             return null;
         }
 
+
+        private ObservableCollection<User> users = new ObservableCollection<User>();
+        public ObservableCollection<User> Users
+        {
+            get { return users; }
+            set
+            {
+                users = value;
+                RaisePropertyChanged(() => Users);
+            }
+        }
+
+        private ObservableCollection<Milestone> milestones = new ObservableCollection<Milestone>();
+        public ObservableCollection<Milestone> Milestones
+        {
+            get { return milestones; }
+            set
+            {
+                milestones = value;
+                RaisePropertyChanged(() => Milestones);
+            }
+        }
+
+        public void GetOrganisationUsers(Repository repository)
+        {
+            Users.Clear();
+            Users.Add(new User { Login = "No User", Name = "No User" });
+
+            if (repository.Owner.IsOrganization)
+            {
+                GithubRepository
+                    .GetOrganisationUsers(repository.Owner.Login)
+                    .ContinueWith(t =>
+                                      {
+                                          if (t.Exception != null) return;
+                                          foreach (var u in t.Result)
+                                          {
+                                              Users.Add(u);
+                                          }
+                                      });
+            }
+            else
+                Users.Add(repository.Owner);
+        }
+
+        public void GetMilestonesFor(Repository repository)
+        {
+            Milestones.Clear();
+            Milestones.Add(new Milestone { Title = "No Milestone" });
+
+            if (User == null || repository == null) return;
+
+            if (repository.HasIssues)
+            {
+                GithubRepository
+                .GetMilestones(repository.Owner.Login, repository.Name)
+                .ContinueWith(t =>
+                {
+                    if (t.Exception != null) return;
+                    foreach (var milestone in t.Result)
+                    {
+                        Milestones.Add(milestone);
+                    }
+                });
+            }
+        }
+
         private Dictionary<User, IEnumerable<User>> organisationUsers;
         public Dictionary<User, IEnumerable<User>> OrganisationUsers
         {
@@ -137,17 +159,41 @@ namespace GithubForOutlook.Logic.Modules.Tasks
             }
         }
 
-        public ObservableCollection<SelectionLabel> Labels { get; set; }
+        private ObservableCollection<SelectionLabel> labels = new ObservableCollection<SelectionLabel>();
+        public ObservableCollection<SelectionLabel> Labels
+        {
+            get { return labels; }
+            set { labels = value; }
+        }
 
         public void SetLabels()
         {
-            Labels = new ObservableCollection<SelectionLabel>(GetLabels(SelectedProject).Select(s => new SelectionLabel
+            GetLabels(SelectedProject);
+        }
+
+        public void GetLabels(Repository repository)
+        {
+            Labels.Clear();
+
+            if (User == null || repository == null) return;
+
+            if (repository.HasIssues)
+            {
+                GithubRepository.GetLabels(repository.Owner.Login, repository.Name)
+                    .ContinueWith(t =>
+                                    {
+                                        foreach (var label in t.Result.Select(s => new SelectionLabel
                                                                 {
                                                                     IsChecked = false,
                                                                     Color = s.Color,
                                                                     Name = s.Name,
                                                                     Url = s.Url
-                                                                }));
+                                                                }))
+                                        {
+                                            Labels.Add(label);
+                                        }
+                                    });
+            }
         }
 
         public Repository SelectedProject { get; set; }
