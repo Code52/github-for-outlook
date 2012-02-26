@@ -66,7 +66,7 @@ namespace GithubForOutlook.Logic
             IAuthenticator authenticator;
             if (!string.IsNullOrWhiteSpace(settings.AccessToken))
             {
-                authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(settings.AccessToken);
+                authenticator = new OAuth2UriQueryParameterAuthenticator(settings.AccessToken);
             }
             else
             {

@@ -30,6 +30,14 @@ namespace GithubForOutlook.Logic.Modules.Settings
             this.client = client;
             this.settingsService = settingsService;
             this.settings = settings;
+
+            if (!string.IsNullOrWhiteSpace(settings.UserName) )
+            {
+                User = new User
+                {
+                    Name = settings.UserName
+                };
+            }
         }
 
         private bool trackIssues;
@@ -146,10 +154,11 @@ namespace GithubForOutlook.Logic.Modules.Settings
 
         private void MapUser(NGitHub.Models.User obj)
         {
+            settings.UserName = obj.Login;
+            settingsService.Save();
             User = new User
             {
                 Name = obj.Login,
-                Icon = obj.AvatarUrl
             };
         }
 

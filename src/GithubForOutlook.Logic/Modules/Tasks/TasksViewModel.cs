@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using GithubForOutlook.Logic.Models;
 using GithubForOutlook.Logic.Repositories.Interfaces;
 using NGitHub.Models;
@@ -28,7 +29,14 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 
         public void Login()
         {
-            User = githubRepository.GetUser().Result;
+            var task = githubRepository.GetUser();
+            task.ContinueWith(t =>
+                                  {
+                                      if (t.Exception == null)
+                                      {
+                                          User = t.Result;
+                                      }
+                                  });
         }
 
         public User User { get; set; }
@@ -85,7 +93,7 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 
         public IEnumerable<Milestone> GetMilestones(Repository repository)
         {
-            var list = new List<Milestone> { new Milestone { Title = "No Milestone" }};
+            var list = new List<Milestone> { new Milestone { Title = "No Milestone" } };
 
             if (User == null || repository == null) return list;
 
@@ -98,7 +106,7 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 
             return list;
         }
-       
+
         public Dictionary<User, IEnumerable<User>> GetOrganisationUsers()
         {
             var results = new Dictionary<User, IEnumerable<User>>();
@@ -135,10 +143,10 @@ namespace GithubForOutlook.Logic.Modules.Tasks
         {
             Labels = new ObservableCollection<SelectionLabel>(GetLabels(SelectedProject).Select(s => new SelectionLabel
                                                                 {
-                                                                  IsChecked = false,
-                                                                  Color = s.Color,
-                                                                  Name = s.Name,
-                                                                  Url = s.Url
+                                                                    IsChecked = false,
+                                                                    Color = s.Color,
+                                                                    Name = s.Name,
+                                                                    Url = s.Url
                                                                 }));
         }
 
