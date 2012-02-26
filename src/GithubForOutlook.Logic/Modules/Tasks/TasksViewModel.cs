@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
 using GithubForOutlook.Logic.Models;
 using GithubForOutlook.Logic.Repositories.Interfaces;
@@ -19,26 +20,26 @@ namespace GithubForOutlook.Logic.Modules.Tasks
         {
             GithubRepository = githubRepository;
 
-            Users = new ObservableCollection<User>();
-            Milestones = new ObservableCollection<Milestone>();
-            Labels = new ObservableCollection<SelectionLabel>();
-            Projects = new ObservableCollection<Repository>();
+            Users = new ObservableCollectionEx<User>();
+            Milestones = new ObservableCollectionEx<Milestone>();
+            Labels = new ObservableCollectionEx<SelectionLabel>();
+            Projects = new ObservableCollectionEx<Repository>();
         }
 
         public User User { get; set; }
 
-        private ObservableCollection<Repository> projects;
-        public ObservableCollection<Repository> Projects
+        private ObservableCollectionEx<Repository> projects;
+        public ObservableCollectionEx<Repository> Projects
         {
             get { return projects; }
             set { projects = value; }
         }
 
-        public ObservableCollection<User> Users { get; set; }
+        public ObservableCollectionEx<User> Users { get; set; }
 
-        public ObservableCollection<Milestone> Milestones { get; set; }
+        public ObservableCollectionEx<Milestone> Milestones { get; set; }
 
-        public ObservableCollection<SelectionLabel> Labels { get; set; }
+        public ObservableCollectionEx<SelectionLabel> Labels { get; set; }
 
         public IGithubRepository GithubRepository { get; private set; }
 
@@ -72,10 +73,14 @@ namespace GithubForOutlook.Logic.Modules.Tasks
         {
             if (task.Exception == null)
             {
-                Dispatcher.CurrentDispatcher
-                    .Invoke((Action)(() => PopulateCollections(task.Result)),
-                                           DispatcherPriority.Background);
+                // this is a bullshit fix
+                ExecuteOnMainThread(() => PopulateCollections(task.Result));
             }
+        }
+
+        private void ExecuteOnMainThread(Action action)
+        {
+            Application.Current.Dispatcher.BeginInvoke(action, DispatcherPriority.Background);
         }
 
         private void PopulateCollections(IEnumerable<Repository> items)
@@ -107,31 +112,34 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 
         public void GetOrganisationUsers(Repository repository)
         {
-            Users.Clear();
-            Users.Add(new User { Login = "No User", Name = "No User" });
-
             if (repository.Owner.IsOrganization)
             {
                 GithubRepository
                     .GetOrganisationUsers(repository.Owner.Login)
                     .ContinueWith(t =>
                                       {
+                                          // this is a bullshit fix
                                           if (t.Exception != null) return;
-                                          foreach (var u in t.Result)
-                                          {
-                                              Users.Add(u);
-                                          }
+                                          ExecuteOnMainThread(() => PopulateUsers(t.Result));
                                       });
             }
             else
                 Users.Add(repository.Owner);
         }
 
+        private void PopulateUsers(IEnumerable<User> result)
+        {
+            Users.Clear();
+            Users.Add(new User { Login = "No User", Name = "No User" });
+
+            foreach (var u in result)
+            {
+                Users.Add(u);
+            }
+        }
+
         public void GetMilestonesFor(Repository repository)
         {
-            Milestones.Clear();
-            Milestones.Add(new Milestone { Title = "No Milestone" });
-
             if (User == null || repository == null) return;
 
             if (repository.HasIssues)
@@ -141,11 +149,35 @@ namespace GithubForOutlook.Logic.Modules.Tasks
                 .ContinueWith(t =>
                 {
                     if (t.Exception != null) return;
-                    foreach (var milestone in t.Result)
-                    {
-                        Milestones.Add(milestone);
-                    }
+                    ExecuteOnMainThread(() => PopulateMilestones(t.Result));
                 });
+            }
+        }
+
+        private void PopulateMilestones(IEnumerable<Milestone> result)
+        {
+            Milestones.Clear();
+            Milestones.Add(new Milestone { Title = "No Milestone" });
+
+            foreach (var u in result)
+            {
+                Milestones.Add(u);
+            }
+        }
+        private void PopulateLabels(IEnumerable<Label> result)
+        {
+            Labels.Clear();
+            
+
+            foreach (var label in result.Select(s => new SelectionLabel
+            {
+                IsChecked = false,
+                Color = s.Color,
+                Name = s.Name,
+                Url = s.Url
+            }))
+            {
+                Labels.Add(label);
             }
         }
 
@@ -169,19 +201,7 @@ namespace GithubForOutlook.Logic.Modules.Tasks
             if (repository.HasIssues)
             {
                 GithubRepository.GetLabels(repository.Owner.Login, repository.Name)
-                    .ContinueWith(t =>
-                                    {
-                                        foreach (var label in t.Result.Select(s => new SelectionLabel
-                                                                {
-                                                                    IsChecked = false,
-                                                                    Color = s.Color,
-                                                                    Name = s.Name,
-                                                                    Url = s.Url
-                                                                }))
-                                        {
-                                            Labels.Add(label);
-                                        }
-                                    });
+                    .ContinueWith(t => ExecuteOnMainThread(() => PopulateLabels(t.Result)));
             }
         }
 
