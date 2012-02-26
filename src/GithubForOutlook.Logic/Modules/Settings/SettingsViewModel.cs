@@ -40,42 +40,15 @@ namespace GithubForOutlook.Logic.Modules.Settings
             }
         }
 
-        private bool trackIssues;
-        public bool TrackIssues
-        {
-            get { return trackIssues; }
-            set
-            {
-                trackIssues = value;
-                RaisePropertyChanged(() => TrackIssues);
-            }
-        }
+        public bool TrackIssues { get; set; }
 
-        private bool trackPullRequests;
-        public bool TrackPullRequests
-        {
-            get { return trackPullRequests; }
-            set
-            {
-                trackPullRequests = value;
-                RaisePropertyChanged(() => TrackPullRequests);
-            }
-        }
-
-        private User user;
+        public bool TrackPullRequests { get; set; }
+        
         private bool showAuthenticateButton;
         private string authenticationSecret;
 
-        public User User
-        {
-            get { return user; }
-            set
-            {
-                user = value;
-                RaisePropertyChanged(() => User);
-            }
-        }
-
+        public User User { get; set; }
+        
         public bool ShowAuthenticateButton
         {
             get { return showAuthenticateButton; }

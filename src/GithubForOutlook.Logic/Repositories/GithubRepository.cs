@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using GithubForOutlook.Logic.Repositories.Interfaces;
 using NGitHub;
 using NGitHub.Models;
-using RestSharp;
 
 namespace GithubForOutlook.Logic.Repositories
 {
