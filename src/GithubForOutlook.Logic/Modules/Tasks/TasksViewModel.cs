@@ -123,13 +123,12 @@ namespace GithubForOutlook.Logic.Modules.Tasks
             }
             else
             {
-                Users.Add(repository.Owner);
+                PopulateUsers(new[] { repository.Owner });
             }
         }
 
         private void PopulateUsers(IEnumerable<User> result)
         {
-          
             foreach (var u in result)
             {
                 Users.Add(u);
@@ -165,7 +164,7 @@ namespace GithubForOutlook.Logic.Modules.Tasks
         private void PopulateLabels(IEnumerable<Label> result)
         {
             Labels.Clear();
-            
+
 
             foreach (var label in result.Select(s => new SelectionLabel
             {
