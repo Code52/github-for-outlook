@@ -119,7 +119,10 @@ namespace GithubForOutlook.Logic.Modules.Tasks
                                       });
             }
             else
+            {
+                Users.Clear();
                 Users.Add(repository.Owner);
+            }
         }
 
         private void PopulateUsers(IEnumerable<User> result)
