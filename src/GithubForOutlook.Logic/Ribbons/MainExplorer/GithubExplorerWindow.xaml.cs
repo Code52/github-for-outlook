@@ -1,5 +1,6 @@
-﻿using GithubForOutlook.Logic.Modules.Tasks;
-using Microsoft.Office.Interop.Outlook;
+﻿using System.Windows;
+using System.Windows.Controls;
+using GithubForOutlook.Logic.Modules.Tasks;
 using NGitHub.Models;
 
 namespace GithubForOutlook.Logic.Ribbons.MainExplorer
@@ -10,10 +11,10 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
         {
             InitializeComponent();
 
-            this.DataContext = tvm;
+            DataContext = tvm;
         }
 
-        private void CreateIssue_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void CreateIssueClick(object sender, RoutedEventArgs e)
         {
             ResultText.Text = "";
 
@@ -34,7 +35,7 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
             }
         }
 
-        private void Repositories_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void RepositoriesSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var dc = this.DataContext as TasksViewModel;
             if (dc == null) return;
@@ -42,12 +43,8 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
             var selected = Repositories.SelectedItem as Repository;
             if(selected == null) return;
 
-            UsersCombo.ItemsSource = null;
-            UsersCombo.ItemsSource = dc.GetOrganisationUsers(selected);
-
-            MilestoneCombo.ItemsSource = null;
-            MilestoneCombo.ItemsSource = dc.GetMilestones(selected);
-
+            dc.GetOrganisationUsers(selected);
+            dc.GetMilestonesFor(selected);
             dc.SetLabels();
         }
     }

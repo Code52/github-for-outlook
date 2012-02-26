@@ -114,9 +114,8 @@
     <Compile Include="Ribbons\MainExplorer\GithubExplorerWindow.xaml.cs">
       <DependentUpon>GithubExplorerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ribbons\Task\GithubTask.cs" />
-    <Compile Include="Ribbons\Task\GithubTaskPanel.xaml.cs">
-      <DependentUpon>GithubTaskPanel.xaml</DependentUpon>
+    <Compile Include="Ribbons\Settings\GithubSettingsWindow.xaml.cs">
+      <DependentUpon>GithubSettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Ribbons\Email\GithubMailItem.cs" />
     <Compile Include="Sync\GitTaskSync.cs" />
@@ -125,16 +124,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Ribbons\Task\GithubTask.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="Ribbons\MainExplorer\GithubExplorerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Ribbons\Task\GithubTaskPanel.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Ribbons\Settings\GithubSettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

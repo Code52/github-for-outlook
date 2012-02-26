@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 using GithubForOutlook.Logic.Models;
 using GithubForOutlook.Logic.Repositories.Interfaces;
 using NGitHub.Models;
@@ -13,92 +16,77 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 {
     public class TasksViewModel : OfficeViewModelBase
     {
-        private readonly IGithubRepository githubRepository;
-
         public TasksViewModel(IGithubRepository githubRepository)
         {
-            this.githubRepository = githubRepository;
-        }
+            GithubRepository = githubRepository;
 
-        public IGithubRepository GithubRepository
-        {
-            get { return githubRepository; }
-        }
-
-        public void Login(string username, string password)
-        {
-            githubRepository.Login(username, password);
-            User = githubRepository.GetUser().Result;
+            Users = new ObservableCollection<User>();
+            Milestones = new ObservableCollection<Milestone>();
+            Labels = new ObservableCollection<SelectionLabel>();
+            Projects = new ObservableCollection<Repository>();
         }
 
         public User User { get; set; }
 
-        public IEnumerable<Repository> GetProjects()
-        {
-            if (User == null) return new List<Repository>();
+        public ObservableCollection<Repository> Projects { get; set; }
 
-            return githubRepository.GetProjects(User.Login).Result.Where(p => p.HasIssues);
-        }
+        public ObservableCollection<User> Users { get; set; }
 
-        private IEnumerable<Repository> projects;
-        public IEnumerable<Repository> Projects
+        public ObservableCollection<Milestone> Milestones { get; set; }
+
+        public ObservableCollection<SelectionLabel> Labels { get; set; }
+
+        public IGithubRepository GithubRepository { get; private set; }
+
+        public void Login()
         {
-            get
+            if (User == null)
             {
-                if (projects == null || !projects.Any())
-                    projects = GetProjects();
-
-                return projects;
+                GithubRepository.GetUser()
+                    .ContinueWith<IEnumerable<Repository>>(GetProjectsForUser)
+                    .ContinueWith(AssignProjects);
+            }
+            else
+            {
+                GithubRepository.GetProjects(User.Login)
+                    .ContinueWith(AssignProjects);
             }
         }
 
-        public IEnumerable<User> GetOrganisationUsers(Repository repository)
+        private IEnumerable<Repository> GetProjectsForUser(Task<User> task)
         {
-            var list = new List<User> { new User { Login = "No User", Name = "No User" } };
+            if (task.Exception == null)
+                User = task.Result;
 
-            if (repository.Owner.IsOrganization)
-            {
-                var result = GithubRepository.GetOrganisationUsers(repository.Owner.Login).Result;
+            if (User == null)
+                return Enumerable.Empty<Repository>();
 
-                list.AddRange(result);
-            }
-            else list.Add(repository.Owner);
-
-            return list;
+            return GithubRepository.GetProjects(User.Login).Result;
         }
 
-        public IEnumerable<Label> GetLabels(Repository repository)
+        private void AssignProjects(Task<IEnumerable<Repository>> task)
         {
-            var list = new List<Label>();
-
-            if (User == null || repository == null) return list;
-
-            if (repository.HasIssues)
+            if (task.Exception == null)
             {
-                var result = GithubRepository.GetLabels(repository.Owner.Login, repository.Name).Result;
-
-                list.AddRange(result);
+                // this is a bullshit fix
+                ExecuteOnMainThread(() => PopulateCollections(task.Result));
             }
-
-            return list;
         }
 
-        public IEnumerable<Milestone> GetMilestones(Repository repository)
+        private void ExecuteOnMainThread(Action action)
         {
-            var list = new List<Milestone> { new Milestone { Title = "No Milestone" }};
-
-            if (User == null || repository == null) return list;
-
-            if (repository.HasIssues)
-            {
-                var result = GithubRepository.GetMilestones(repository.Owner.Login, repository.Name).Result;
-
-                list.AddRange(result);
-            }
-
-            return list;
+            Application.Current.Dispatcher.BeginInvoke(action, DispatcherPriority.Background);
         }
-       
+
+        private void PopulateCollections(IEnumerable<Repository> items)
+        {
+            Projects.Clear();
+            foreach (var project in items) // TODO: .Where(p => p.HasIssues)
+            {
+                Projects.Add(project);
+            }
+        }
+
         public Dictionary<User, IEnumerable<User>> GetOrganisationUsers()
         {
             var results = new Dictionary<User, IEnumerable<User>>();
@@ -117,29 +105,101 @@ namespace GithubForOutlook.Logic.Modules.Tasks
             return null;
         }
 
-        private Dictionary<User, IEnumerable<User>> organisationUsers;
-        public Dictionary<User, IEnumerable<User>> OrganisationUsers
+        public void GetOrganisationUsers(Repository repository)
         {
-            get
-            {
-                if (organisationUsers == null)
-                    organisationUsers = GetOrganisationUsers();
+            Users.Clear();
+            Users.Add(new User { Login = "No User", Name = "No User" });
 
-                return organisationUsers;
+            if (repository.Owner.IsOrganization)
+            {
+                GithubRepository
+                    .GetOrganisationUsers(repository.Owner.Login)
+                    .ContinueWith(t =>
+                                      {
+                                          // this is a bullshit fix
+                                          if (t.Exception != null) return;
+                                          ExecuteOnMainThread(() => PopulateUsers(t.Result));
+                                      });
+            }
+            else
+            {
+                PopulateUsers(new[] { repository.Owner });
             }
         }
 
-        public ObservableCollection<SelectionLabel> Labels { get; set; }
+        private void PopulateUsers(IEnumerable<User> result)
+        {
+            foreach (var u in result)
+            {
+                Users.Add(u);
+            }
+        }
+
+        public void GetMilestonesFor(Repository repository)
+        {
+            if (User == null || repository == null) return;
+
+            if (repository.HasIssues)
+            {
+                GithubRepository
+                .GetMilestones(repository.Owner.Login, repository.Name)
+                .ContinueWith(t =>
+                {
+                    if (t.Exception != null) return;
+                    ExecuteOnMainThread(() => PopulateMilestones(t.Result));
+                });
+            }
+        }
+
+        private void PopulateMilestones(IEnumerable<Milestone> result)
+        {
+            Milestones.Clear();
+            Milestones.Add(new Milestone { Title = "No Milestone" });
+
+            foreach (var u in result)
+            {
+                Milestones.Add(u);
+            }
+        }
+        private void PopulateLabels(IEnumerable<Label> result)
+        {
+            Labels.Clear();
+
+
+            foreach (var label in result.Select(s => new SelectionLabel
+            {
+                IsChecked = false,
+                Color = s.Color,
+                Name = s.Name,
+                Url = s.Url
+            }))
+            {
+                Labels.Add(label);
+            }
+        }
+
+        private Dictionary<User, IEnumerable<User>> organisationUsers;
+        public Dictionary<User, IEnumerable<User>> OrganisationUsers
+        {
+            get { return organisationUsers ?? (organisationUsers = GetOrganisationUsers()); }
+        }
 
         public void SetLabels()
         {
-            Labels = new ObservableCollection<SelectionLabel>(GetLabels(SelectedProject).Select(s => new SelectionLabel
-                                                                {
-                                                                  IsChecked = false,
-                                                                  Color = s.Color,
-                                                                  Name = s.Name,
-                                                                  Url = s.Url
-                                                                }));
+            GetLabels(SelectedProject);
+        }
+
+        public void GetLabels(Repository repository)
+        {
+            Labels.Clear();
+
+            if (User == null || repository == null) return;
+
+            if (repository.HasIssues)
+            {
+                GithubRepository.GetLabels(repository.Owner.Login, repository.Name)
+                    .ContinueWith(t => ExecuteOnMainThread(() => PopulateLabels(t.Result)));
+            }
         }
 
         public Repository SelectedProject { get; set; }
@@ -173,18 +233,15 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 
             string[] selectedLabels = Labels.Where(l => l.IsChecked).Select(l => l.Name).ToArray();
 
-            var result = new Issue();
-
             try
             {
-                result = githubRepository.CreateIssue(User.Login, SelectedProject.Name, Title, Body, assigned, milestone, selectedLabels).Result;
+                var result = GithubRepository.CreateIssue(User.Login, SelectedProject.Name, Title, Body, assigned, milestone, selectedLabels).Result;
+                return ValidationResult<Issue>.Success.WithData(result);
             }
             catch (Exception ex)
             {
                 return ValidationResult<Issue>.Failure("Error Uploading Issue: " + ex.Message);
             }
-
-            return ValidationResult<Issue>.Success.WithData(result);
         }
     }
 }

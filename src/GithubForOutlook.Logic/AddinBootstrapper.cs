@@ -6,10 +6,10 @@ using GithubForOutlook.Logic.Repositories;
 using GithubForOutlook.Logic.Repositories.Interfaces;
 using GithubForOutlook.Logic.Ribbons.Email;
 using GithubForOutlook.Logic.Ribbons.MainExplorer;
-using GithubForOutlook.Logic.Ribbons.Task;
 using Microsoft.Office.Interop.Outlook;
 using NGitHub;
 using NGitHub.Authentication;
+using RestSharp;
 using VSTOContrib.Core.RibbonFactory.Interfaces;
 
 namespace GithubForOutlook.Logic
@@ -29,38 +29,59 @@ namespace GithubForOutlook.Logic
 
         private static void RegisterComponents(ContainerBuilder containerBuilder, NameSpace nameSpace)
         {
-            var assembly = typeof (GithubTask).Assembly;
+            var assembly = typeof(GithubExplorerRibbon).Assembly;
 
             containerBuilder.RegisterAssemblyTypes(assembly)
                             .Where(t => t.Name.EndsWith("ViewModel"))
                             .AsSelf();
 
-            containerBuilder.RegisterType<GitHubOAuthAuthorizer>()
-                            .AsImplementedInterfaces();
-            containerBuilder.RegisterType<GitHubClient>()
-                            .AsImplementedInterfaces();
-
             containerBuilder.Register(c => nameSpace).SingleInstance();
 
             var settingsService = new SettingsService();
             ApplicationSettings settings;
+            // settingsService.Clear(); // uncomment this for testing
             if (!settingsService.ContainsKey("Settings"))
             {
-                settings = new ApplicationSettings { UserName = "code52testing", Password = "code52test123" };    
+                // NOTE - we can get away without doing basic auth, but i'll leave this here for the moment
+                settings = new ApplicationSettings { UserName = "code52testing", Password = "code52test123" };
+                settingsService.Set("client", "9e96382c3109d9f35371");
+                settingsService.Set("secret", "60d6c49b946ba4ddc52a34aa0dc1cf43e6077ba6");
+                settingsService.Set("redirect", "http://code52.org");
                 settingsService.Set("Settings", settings);
+                settingsService.Save();
             }
             else
             {
                 settings = settingsService.Get<ApplicationSettings>("Settings");
             }
-            
+
             containerBuilder.Register(c => settings)
-                            .SingleInstance();
+                .SingleInstance();
 
             containerBuilder.RegisterInstance(settingsService)
                             .AsImplementedInterfaces()
                             .SingleInstance();
 
+            // TODO: deprecate basic auth once we are happy with oauth flow
+            IAuthenticator authenticator;
+            //if (!string.IsNullOrWhiteSpace(settings.AccessToken))
+            //{
+            //    authenticator = new OAuth2UriQueryParameterAuthenticator(settings.AccessToken);
+            //}
+            //else
+            //{
+                authenticator = new HttpBasicAuthenticator(settings.UserName, settings.Password);
+            //}
+
+            containerBuilder.RegisterInstance(authenticator)
+                            .SingleInstance();
+
+            containerBuilder.RegisterType<GitHubOAuthAuthorizer>()
+                            .AsImplementedInterfaces();
+
+            containerBuilder.RegisterType<GitHubClient>()
+                            .AsImplementedInterfaces()
+                            .PropertiesAutowired();
 
             containerBuilder.RegisterType<OutlookDispatchingRepository>()
                 .As<IOutlookRepository>();
@@ -69,10 +90,6 @@ namespace GithubForOutlook.Logic
                 .As<IGithubRepository>();
 
             containerBuilder.RegisterType<GithubMailItem>()
-                .As<IRibbonViewModel>()
-                .AsSelf();
-
-            containerBuilder.RegisterType<GithubTask>()
                 .As<IRibbonViewModel>()
                 .AsSelf();
 
