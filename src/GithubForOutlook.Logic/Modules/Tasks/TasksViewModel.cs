@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using GithubForOutlook.Logic.Models;
 using GithubForOutlook.Logic.Repositories.Interfaces;
 using NGitHub.Models;
@@ -17,16 +18,21 @@ namespace GithubForOutlook.Logic.Modules.Tasks
         public TasksViewModel(IGithubRepository githubRepository)
         {
             GithubRepository = githubRepository;
-            
+
             Users = new ObservableCollection<User>();
             Milestones = new ObservableCollection<Milestone>();
             Labels = new ObservableCollection<SelectionLabel>();
             Projects = new ObservableCollection<Repository>();
         }
-        
+
         public User User { get; set; }
 
-        public ObservableCollection<Repository> Projects { get; set; }
+        private ObservableCollection<Repository> projects;
+        public ObservableCollection<Repository> Projects
+        {
+            get { return projects; }
+            set { projects = value; }
+        }
 
         public ObservableCollection<User> Users { get; set; }
 
@@ -35,12 +41,20 @@ namespace GithubForOutlook.Logic.Modules.Tasks
         public ObservableCollection<SelectionLabel> Labels { get; set; }
 
         public IGithubRepository GithubRepository { get; private set; }
-        
+
         public void Login()
         {
-            var task = GithubRepository.GetUser();
-            task.ContinueWith<IEnumerable<Repository>>(GetProjectsForUser)
-                .ContinueWith(AssignProjects);
+            if (User == null)
+            {
+                GithubRepository.GetUser()
+                    .ContinueWith<IEnumerable<Repository>>(GetProjectsForUser)
+                    .ContinueWith(AssignProjects);
+            }
+            else
+            {
+                GithubRepository.GetProjects(User.Login)
+                    .ContinueWith(AssignProjects);
+            }
         }
 
         private IEnumerable<Repository> GetProjectsForUser(Task<User> task)
@@ -48,19 +62,28 @@ namespace GithubForOutlook.Logic.Modules.Tasks
             if (task.Exception == null)
                 User = task.Result;
 
+            if (User == null)
+                return Enumerable.Empty<Repository>();
+
             return GithubRepository.GetProjects(User.Login).Result;
         }
 
         private void AssignProjects(Task<IEnumerable<Repository>> task)
         {
-            Projects.Clear();
-
             if (task.Exception == null)
             {
-                foreach (var project in task.Result.Where(p => p.HasIssues))
-                {
-                    Projects.Add(project);
-                }
+                Dispatcher.CurrentDispatcher
+                    .Invoke((Action)(() => PopulateCollections(task.Result)),
+                                           DispatcherPriority.Background);
+            }
+        }
+
+        private void PopulateCollections(IEnumerable<Repository> items)
+        {
+            Projects.Clear();
+            foreach (var project in items) // TODO: .Where(p => p.HasIssues)
+            {
+                Projects.Add(project);
             }
         }
 

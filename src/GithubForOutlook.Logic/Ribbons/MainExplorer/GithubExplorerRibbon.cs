@@ -19,7 +19,8 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
         readonly Func<SettingsViewModel> getSettingsViewModel;
         readonly TasksViewModel tasks;
 
-        public GithubExplorerRibbon(Func<SettingsViewModel> getSettingsViewModel, TasksViewModel tasks)
+        public GithubExplorerRibbon(
+            Func<SettingsViewModel> getSettingsViewModel, TasksViewModel tasks)
         {
             this.getSettingsViewModel = getSettingsViewModel;
             this.tasks = tasks;
@@ -41,14 +42,13 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
             //TODO create proper task window and show it here.. selectedMailItem will be populated properly
 
             if (selectedMailItem == null) return;
-            
-            if(tasks.User == null)
-                tasks.Login();
+
+            tasks.Login();
 
             tasks.Title = selectedMailItem.Subject;
             tasks.Sender = selectedMailItem.Sender.Name;
             tasks.ReceivedDate = selectedMailItem.ReceivedTime;
-            tasks.Body = string.Format("Sender: {0} <{1}>\nReceived: {2}\n\n{3}", 
+            tasks.Body = string.Format("Sender: {0} <{1}>\nReceived: {2}\n\n{3}",
                                         selectedMailItem.Sender.Name,
                                         selectedMailItem.Sender.Address,
                                         selectedMailItem.ReceivedTime.ToString(CultureInfo.CurrentCulture),
@@ -117,7 +117,7 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
             set
             {
                 mailItemSelected = value;
-                RaisePropertyChanged(()=>MailItemSelected);
+                RaisePropertyChanged(() => MailItemSelected);
             }
         }
 

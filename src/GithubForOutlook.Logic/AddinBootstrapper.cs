@@ -6,7 +6,6 @@ using GithubForOutlook.Logic.Repositories;
 using GithubForOutlook.Logic.Repositories.Interfaces;
 using GithubForOutlook.Logic.Ribbons.Email;
 using GithubForOutlook.Logic.Ribbons.MainExplorer;
-using GithubForOutlook.Logic.Ribbons.Task;
 using Microsoft.Office.Interop.Outlook;
 using NGitHub;
 using NGitHub.Authentication;
@@ -30,7 +29,7 @@ namespace GithubForOutlook.Logic
 
         private static void RegisterComponents(ContainerBuilder containerBuilder, NameSpace nameSpace)
         {
-            var assembly = typeof (GithubTask).Assembly;
+            var assembly = typeof(GithubExplorerRibbon).Assembly;
 
             containerBuilder.RegisterAssemblyTypes(assembly)
                             .Where(t => t.Name.EndsWith("ViewModel"))
@@ -64,14 +63,14 @@ namespace GithubForOutlook.Logic
 
             // TODO: deprecate basic auth once we are happy with oauth flow
             IAuthenticator authenticator;
-            if (!string.IsNullOrWhiteSpace(settings.AccessToken))
-            {
-                authenticator = new OAuth2UriQueryParameterAuthenticator(settings.AccessToken);
-            }
-            else
-            {
+            //if (!string.IsNullOrWhiteSpace(settings.AccessToken))
+            //{
+            //    authenticator = new OAuth2UriQueryParameterAuthenticator(settings.AccessToken);
+            //}
+            //else
+            //{
                 authenticator = new HttpBasicAuthenticator(settings.UserName, settings.Password);
-            }
+            //}
 
             containerBuilder.RegisterInstance(authenticator)
                             .SingleInstance();
@@ -90,10 +89,6 @@ namespace GithubForOutlook.Logic
                 .As<IGithubRepository>();
 
             containerBuilder.RegisterType<GithubMailItem>()
-                .As<IRibbonViewModel>()
-                .AsSelf();
-
-            containerBuilder.RegisterType<GithubTask>()
                 .As<IRibbonViewModel>()
                 .AsSelf();
 

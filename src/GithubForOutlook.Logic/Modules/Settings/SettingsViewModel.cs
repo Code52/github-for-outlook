@@ -44,11 +44,9 @@ namespace GithubForOutlook.Logic.Modules.Settings
 
         public bool TrackPullRequests { get; set; }
         
-        private bool showAuthenticateButton;
-        private string authenticationSecret;
-
         public User User { get; set; }
-        
+
+        private bool showAuthenticateButton;
         public bool ShowAuthenticateButton
         {
             get { return showAuthenticateButton; }
@@ -79,6 +77,7 @@ namespace GithubForOutlook.Logic.Modules.Settings
             return !string.IsNullOrWhiteSpace(AuthenticationSecret);
         }
 
+        private string authenticationSecret;
         public string AuthenticationSecret
         {
             get { return authenticationSecret; }
