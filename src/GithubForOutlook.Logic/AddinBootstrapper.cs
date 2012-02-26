@@ -42,6 +42,7 @@ namespace GithubForOutlook.Logic
             ApplicationSettings settings;
             if (!settingsService.ContainsKey("Settings"))
             {
+                // NOTE - we can get away without doing basic auth, but i'll leave this here for the moment
                 settings = new ApplicationSettings { UserName = "code52testing", Password = "code52test123" };
                 settingsService.Set("client", "9e96382c3109d9f35371");
                 settingsService.Set("secret", "60d6c49b946ba4ddc52a34aa0dc1cf43e6077ba6");
@@ -61,6 +62,7 @@ namespace GithubForOutlook.Logic
                             .AsImplementedInterfaces()
                             .SingleInstance();
 
+            // TODO: deprecate basic auth once we are happy with oauth flow
             IAuthenticator authenticator;
             if (!string.IsNullOrWhiteSpace(settings.AccessToken))
             {
