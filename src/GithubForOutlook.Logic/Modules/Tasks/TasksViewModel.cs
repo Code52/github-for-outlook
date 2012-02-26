@@ -9,7 +9,6 @@ using NGitHub.Models;
 using VSTOContrib.Core.Wpf;
 using Exception = System.Exception;
 using User = NGitHub.Models.User;
-using Repository = NGitHub.Models.Repository;
 
 namespace GithubForOutlook.Logic.Modules.Tasks
 {
@@ -21,6 +20,8 @@ namespace GithubForOutlook.Logic.Modules.Tasks
             
             Users = new ObservableCollection<User>();
             Milestones = new ObservableCollection<Milestone>();
+            Labels = new ObservableCollection<SelectionLabel>();
+            Projects = new ObservableCollection<Repository>();
         }
         
         public User User { get; set; }
@@ -52,9 +53,15 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 
         private void AssignProjects(Task<IEnumerable<Repository>> task)
         {
-            Projects = task.Exception == null
-                        ? new ObservableCollection<Repository>(task.Result.Where(p => p.HasIssues))
-                        : new ObservableCollection<Repository>();
+            Projects.Clear();
+
+            if (task.Exception == null)
+            {
+                foreach (var project in task.Result.Where(p => p.HasIssues))
+                {
+                    Projects.Add(project);
+                }
+            }
         }
 
         public Dictionary<User, IEnumerable<User>> GetOrganisationUsers()
@@ -195,7 +202,6 @@ namespace GithubForOutlook.Logic.Modules.Tasks
             {
                 return ValidationResult<Issue>.Failure("Error Uploading Issue: " + ex.Message);
             }
-
         }
     }
 }
