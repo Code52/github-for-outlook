@@ -45,7 +45,7 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
 
             var settingsViewModel = getSettingsViewModel();
 
-            if (settingsViewModel.User.Name == null || tasks.User == null  || settingsViewModel.User.Name != tasks.User.Login)
+            if (settingsViewModel.User == null || settingsViewModel.User.Name == null || tasks.User == null  || settingsViewModel.User.Name != tasks.User.Login)
                 tasks.User = null;
 
             tasks.Login();
