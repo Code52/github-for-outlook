@@ -64,6 +64,13 @@ namespace GithubForOutlook.Logic.Repositories
                                                                            reponame);
         }
 
+        public Task<IEnumerable<User>> GetCollaborators(string username, string reponame)
+        {
+            return NGitHub<IEnumerable<User>, string, string>(client.Repositories.GetRepositoryCollaboratorsAsync, username,
+                                                                           reponame);
+        }
+
+
         private Task<T> NGitHub<T>(Func<Action<T>, Action<Exception>, GitHubRequestAsyncHandle> call)
         {
             var completionSource = new TaskCompletionSource<T>();

@@ -21,9 +21,9 @@ namespace GithubForOutlook.Logic.Modules.Settings
         readonly ApplicationSettings settings;
 
         public SettingsViewModel(
-            IGitHubOAuthAuthorizer authorizer, 
-            IGitHubClient client, 
-            ISettingsService settingsService, 
+            IGitHubOAuthAuthorizer authorizer,
+            IGitHubClient client,
+            ISettingsService settingsService,
             ApplicationSettings settings)
         {
             this.authorizer = authorizer;
@@ -31,19 +31,16 @@ namespace GithubForOutlook.Logic.Modules.Settings
             this.settingsService = settingsService;
             this.settings = settings;
 
-            if (!string.IsNullOrWhiteSpace(settings.UserName) )
+            User = new User
             {
-                User = new User
-                {
-                    Name = settings.UserName
-                };
-            }
+                Name = settings.UserName,
+            };
         }
 
         public bool TrackIssues { get; set; }
 
         public bool TrackPullRequests { get; set; }
-        
+
         public User User { get; set; }
 
         private bool showAuthenticateButton;
@@ -139,6 +136,17 @@ namespace GithubForOutlook.Logic.Modules.Settings
         public void Clear()
         {
             User = null;
+        }
+
+        public void SaveBasicAuthSettings(string username, string password)
+        {
+            settings.UserName = username;
+            settings.Password = password;
+
+            settingsService.Set("Settings", settings);
+            settingsService.Save();
+
+            client.Authenticator = new HttpBasicAuthenticator(settings.UserName, settings.Password);
         }
     }
 }
