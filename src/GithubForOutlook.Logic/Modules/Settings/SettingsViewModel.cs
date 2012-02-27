@@ -35,7 +35,7 @@ namespace GithubForOutlook.Logic.Modules.Settings
             {
                 User = new User
                 {
-                    Name = settings.UserName
+                    Name = settings.UserName,
                 };
             }
         }
@@ -139,6 +139,17 @@ namespace GithubForOutlook.Logic.Modules.Settings
         public void Clear()
         {
             User = null;
+        }
+
+        public void SaveBasicAuthSettings(string username, string password)
+        {
+            settings.UserName = username;
+            settings.Password = password;
+
+            settingsService.Set("Settings", settings);
+            settingsService.Save();
+
+            client.Authenticator = new HttpBasicAuthenticator(settings.UserName, settings.Password);
         }
     }
 }

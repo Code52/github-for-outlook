@@ -43,7 +43,7 @@ namespace GithubForOutlook.Logic
             if (!settingsService.ContainsKey("Settings"))
             {
                 // NOTE - we can get away without doing basic auth, but i'll leave this here for the moment
-                settings = new ApplicationSettings { UserName = "code52testing", Password = "code52test123" };
+                settings = new ApplicationSettings { UserName = "", Password = "" };
                 settingsService.Set("client", "9e96382c3109d9f35371");
                 settingsService.Set("secret", "60d6c49b946ba4ddc52a34aa0dc1cf43e6077ba6");
                 settingsService.Set("redirect", "http://code52.org");
@@ -81,7 +81,8 @@ namespace GithubForOutlook.Logic
 
             containerBuilder.RegisterType<GitHubClient>()
                             .AsImplementedInterfaces()
-                            .PropertiesAutowired();
+                            .PropertiesAutowired()
+                            .SingleInstance();
 
             containerBuilder.RegisterType<OutlookDispatchingRepository>()
                 .As<IOutlookRepository>();

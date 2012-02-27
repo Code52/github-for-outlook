@@ -1,4 +1,5 @@
 ﻿using System;
+using VSTOContrib.Core.Wpf;
 
 namespace GithubForOutlook.Logic.Models
 {
