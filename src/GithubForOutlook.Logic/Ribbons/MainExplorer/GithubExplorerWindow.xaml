@@ -100,7 +100,7 @@
             <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,0,10" FontSize="18" Text="{Binding Title}" HorizontalAlignment="Stretch" Foreground="Black" />
 
             <TextBlock Grid.Row="1" Grid.Column="0" Foreground="#FF666666" FontSize="18" Text="Details:" />
-            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,0,10" Text="{Binding Body}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Foreground="Black" />
+            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,0,10" Text="{Binding Body}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Foreground="Black" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap" />
 
             <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF666666" FontSize="18" Text="Assigned:" />
             <ComboBox Grid.Row="2" Grid.Column="1" FontSize="18" x:Name="UsersCombo"
