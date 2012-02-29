@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" mc:Ignorable="d" 
              ShowTitleBar="False"
+                      Width="400"
+                      Height="200"
              d:DesignHeight="600" d:DesignWidth="800">
     <Window.Resources>
         <ResourceDictionary>
@@ -21,7 +23,30 @@
     <!--<Window.Foreground>
         <SolidColorBrush Color="{DynamicResource BlackBrush}" />
     </Window.Foreground>-->
-    <Grid Margin="10, 0, 10, 50">
+    <Grid Margin="10,5,10,5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="35" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,0,0,20" Grid.ColumnSpan="2" Foreground="#FF666666" FontSize="24" Text="Settings" />
+        
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="10,0,10,0" Foreground="#FF666666" FontSize="18" Text="Username" VerticalAlignment="Center" />
+            <TextBox Grid.Row="1" Grid.Column="1" FontSize="18" x:Name="User" Text="{Binding User.Name}" Width="250" HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Margin="10,0,10,0" Foreground="#FF666666" FontSize="18" Text="Password" VerticalAlignment="Center" />
+            <PasswordBox Grid.Row="2" Grid.Column="1" FontSize="18" x:Name="Password" Width="250" HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+            <Button Content="Save" Grid.Row="3" Grid.Column="3" Margin="10" Width="50" HorizontalAlignment="Right" Click="SaveBasicAuth_Click" />
+        </Grid>
+    
+<!--    <Grid Margin="10, 0, 10, 50">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300" />
             <ColumnDefinition />
@@ -57,7 +82,7 @@
                 <Image Grid.Column="1" Width="30" Height="30">
                 </Image>
                 <TextBlock Text="{Binding User.Name}" Grid.Column="2" Width="100" Margin="10" />
-                <Button Content="Sign in" Grid.Column="3" Margin="10" Command="{Binding SignInCommand}" />
+                    <Button Content="Sign in" Grid.Column="3" Margin="10" Command="{Binding SignInCommand}" />
                 <Button Content="Clear" Grid.Column="4" Margin="10" HorizontalAlignment="Center" Command="{Binding ClearCommand}" />
                 <TextBlock Text="Token" Grid.Row="1" Margin="10" />
 
@@ -86,5 +111,5 @@
         </Grid>
 
 
-    </Grid>
+    </Grid> -->
 </Controls:MetroWindow>

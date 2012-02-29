@@ -24,6 +24,11 @@
     <Grid Margin="10, 0, 10, 50">
         <Grid.Resources>
             <Style x:Key="RepositoryItemContainer" TargetType="{x:Type ListBoxItem}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding HasIssues}" Value="False">
+                        <Setter Property="IsEnabled" Value="False" />
+                    </DataTrigger>
+                </Style.Triggers>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ListBoxItem}">
@@ -31,9 +36,13 @@
                                 <ContentPresenter />
                             </Border>
                             <ControlTemplate.Triggers>
-                                <Trigger Property="IsSelected" Value="true">
-                                    <Setter TargetName="RepoBorder" Property="Background" Value="#FFDDDDDD" />
+                                <Trigger Property="IsSelected" Value="True" >
+                                    <Setter TargetName="RepoBorder" Property="Background" Value="#FFBBBBBB" />
                                 </Trigger>
+                                <DataTrigger Binding="{Binding HasIssues}" Value="False">
+                                    <Setter TargetName="RepoBorder" Property="Background" Value="#FF888888" />
+                                    <Setter TargetName="RepoBorder" Property="ToolTip" Value="Issues are disabled on this repository" />
+                                 </DataTrigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
@@ -91,14 +100,14 @@
             <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,0,10" FontSize="18" Text="{Binding Title}" HorizontalAlignment="Stretch" Foreground="Black" />
 
             <TextBlock Grid.Row="1" Grid.Column="0" Foreground="#FF666666" FontSize="18" Text="Details:" />
-            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,0,10" Text="{Binding Body}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Foreground="Black" />
+            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,0,10" Text="{Binding Body}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Foreground="Black" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap" />
 
             <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Foreground="#FF666666" FontSize="18" Text="Assigned:" />
             <ComboBox Grid.Row="2" Grid.Column="1" FontSize="18" x:Name="UsersCombo"
                       ItemsSource="{Binding Users}"
                       SelectedItem="{Binding AssignedUser}" DisplayMemberPath="Login" Foreground="Black" HorizontalAlignment="Stretch" VerticalAlignment="Center">
                 <ComboBox.Style>
-                    <Style TargetType="ComboBox">
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Path=SelectedItem, ElementName=Repositories}"  Value="{x:Null}">
                                 <Setter Property="IsEnabled" Value="False" />
@@ -113,7 +122,7 @@
                       ItemsSource="{Binding Milestones}"
                       SelectedItem="{Binding SelectedMilestone}" DisplayMemberPath="Title" Foreground="Black" HorizontalAlignment="Stretch" VerticalAlignment="Center">
                 <ComboBox.Style>
-                    <Style TargetType="ComboBox">
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Path=SelectedItem, ElementName=Repositories}"  Value="{x:Null}">
                                 <Setter Property="IsEnabled" Value="False" />
@@ -152,7 +161,7 @@
 
             <Button Grid.Row="5" Grid.Column="2" Width="100" HorizontalAlignment="Right" Content="Create" Click="CreateIssueClick">
                 <Button.Style>
-                    <Style TargetType="Button">
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Path=SelectedItem, ElementName=Repositories}"  Value="{x:Null}">
                                 <Setter Property="IsEnabled" Value="False" />

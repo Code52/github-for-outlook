@@ -61,7 +61,20 @@ namespace GithubForOutlook.Logic.Modules.Tasks
             if (User == null)
                 return Enumerable.Empty<Repository>();
 
-            return GithubRepository.GetProjects(User.Login).Result;
+            var repos = new List<Repository>();
+
+            var orgs = GithubRepository.GetOrganisations(User.Login).Result;
+            var userRepos = GithubRepository.GetProjects(User.Login).Result;
+
+            repos.AddRange(userRepos);
+
+            foreach (var org in orgs)
+            {
+                var orgRepos = GithubRepository.GetProjects(org.Login).Result;
+                repos.AddRange(orgRepos);
+            }
+
+            return repos;
         }
 
         private void AssignProjects(Task<IEnumerable<Repository>> task)
@@ -110,21 +123,28 @@ namespace GithubForOutlook.Logic.Modules.Tasks
             Users.Clear();
             Users.Add(new User { Login = "No User", Name = "No User" });
 
-            if (repository.Owner.IsOrganization)
-            {
-                GithubRepository
-                    .GetOrganisationUsers(repository.Owner.Login)
-                    .ContinueWith(t =>
+            GithubRepository.GetCollaborators(repository.Owner.Login, repository.Name).ContinueWith(t =>
                                       {
                                           // this is a bullshit fix
                                           if (t.Exception != null) return;
                                           ExecuteOnMainThread(() => PopulateUsers(t.Result));
                                       });
-            }
-            else
-            {
-                PopulateUsers(new[] { repository.Owner });
-            }
+
+            //if (repository.Owner.IsOrganization)
+            //{
+            //    GithubRepository
+            //        .GetOrganisationUsers(repository.Owner.Login)
+            //        .ContinueWith(t =>
+            //                          {
+            //                              // this is a bullshit fix
+            //                              if (t.Exception != null) return;
+            //                              ExecuteOnMainThread(() => PopulateUsers(t.Result));
+            //                          });
+            //}
+            //else
+            //{
+            //    PopulateUsers(new[] { repository.Owner });
+            //}
         }
 
         private void PopulateUsers(IEnumerable<User> result)

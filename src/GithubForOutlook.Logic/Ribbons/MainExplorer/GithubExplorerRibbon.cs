@@ -43,6 +43,11 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
 
             if (selectedMailItem == null) return;
 
+            var settingsViewModel = getSettingsViewModel();
+
+            if (settingsViewModel.User == null || settingsViewModel.User.Name == null || tasks.User == null  || settingsViewModel.User.Name != tasks.User.Login)
+                tasks.User = null;
+
             tasks.Login();
 
             tasks.Title = selectedMailItem.Subject;
@@ -61,7 +66,7 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
         {
             var viewModel = getSettingsViewModel();
 
-            var window = new GithubSettingsWindow { DataContext = viewModel };
+            var window = new GithubSettingsWindow(viewModel);
             window.Show();
         }
 
