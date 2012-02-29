@@ -135,7 +135,7 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NGitHub, Version=0.5.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="NGitHub">
       <HintPath>..\packages\NGitHub.1.0.0.11\lib\net40\NGitHub.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
