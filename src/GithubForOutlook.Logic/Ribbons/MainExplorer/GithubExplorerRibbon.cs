@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Globalization;
 using GithubForOutlook.Logic.Modules.Settings;
 using GithubForOutlook.Logic.Modules.Tasks;
@@ -124,6 +125,19 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
                 mailItemSelected = value;
                 RaisePropertyChanged(() => MailItemSelected);
             }
+        }
+
+        public Bitmap GetImage(IRibbonControl control)
+        {
+            switch (control.Id)
+            {
+                case "createTask":
+                    {
+                        return new Bitmap(Properties.Resources.gtfo32x32);
+                    }
+            }
+            return null;
+
         }
 
         public void Cleanup()

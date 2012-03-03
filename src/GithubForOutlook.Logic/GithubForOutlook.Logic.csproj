@@ -66,8 +66,12 @@
     <Reference Include="RestSharp">
       <HintPath>..\packages\RestSharp.102.7\lib\net35\RestSharp.dll</HintPath>
     </Reference>
+    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.0.6.0.1\lib\net40\System.Windows.Interactivity.dll</HintPath>
@@ -106,6 +110,11 @@
     <Compile Include="Modules\Settings\SettingsViewModel.cs" />
     <Compile Include="Modules\Tasks\TasksViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Repositories\GithubRepository.cs" />
     <Compile Include="Repositories\Interfaces\IGithubRepository.cs" />
     <Compile Include="Repositories\Interfaces\IOutlookRepository.cs" />
@@ -134,8 +143,13 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ribbons\Email\GithubMailItem.xml" />
     <EmbeddedResource Include="Ribbons\MainExplorer\GithubExplorerRibbon.xml" />
+    <None Include="Resources\gtfo32x32.png" />
     <Content Include="VSTOContrib.GettingStarted.txt" />
   </ItemGroup>
   <ItemGroup />

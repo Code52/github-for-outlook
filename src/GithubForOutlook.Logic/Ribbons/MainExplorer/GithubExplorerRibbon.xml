@@ -4,7 +4,13 @@
     <tabs>
       <tab idMso="TabMail">
         <group id="githubGroup" label="GitHub">
-          <button id="createTask" label="Create on Github" onAction="CreateIssue" getEnabled="MailItemSelected"/>
+          <button id="createTask" 
+                  label="Create on Github" 
+                  screentip="Create on Github"
+                  size="large"
+                  showImage="true"
+                  onAction="CreateIssue" 
+                  getEnabled="MailItemSelected" />
           <button id="settings" label="Settings" onAction="ShowSettings" />
         </group>
       </tab>
