@@ -47,5 +47,10 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
             dc.GetMilestonesFor(selected);
             dc.SetLabels();
         }
+
+        private void OnDragMoveWindow(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
     }
 }
