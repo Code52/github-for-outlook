@@ -23,5 +23,10 @@ namespace GithubForOutlook.Logic.Ribbons.Settings
 
             Close();
         }
+
+        private void OnDragMoveWindow(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
     }
 }
