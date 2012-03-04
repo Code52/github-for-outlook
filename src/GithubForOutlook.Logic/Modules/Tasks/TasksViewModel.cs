@@ -40,16 +40,23 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 
         public void Login()
         {
-            if (User == null)
+            try
             {
-                GithubRepository.GetUser()
-                    .ContinueWith<IEnumerable<Repository>>(GetProjectsForUser)
-                    .ContinueWith(AssignProjects);
+                if (User == null)
+                {
+                    GithubRepository.GetUser()
+                        .ContinueWith<IEnumerable<Repository>>(GetProjectsForUser)
+                        .ContinueWith(AssignProjects);
+                }
+                else
+                {
+                    GithubRepository.GetProjects(User.Login)
+                        .ContinueWith(AssignProjects);
+                }
             }
-            else
+            catch
             {
-                GithubRepository.GetProjects(User.Login)
-                    .ContinueWith(AssignProjects);
+                Projects = new ObservableCollection<Repository>();
             }
         }
 
