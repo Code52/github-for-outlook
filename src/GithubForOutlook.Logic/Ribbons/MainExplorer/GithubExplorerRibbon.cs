@@ -11,6 +11,7 @@ using VSTOContrib.Core.RibbonFactory.Interfaces;
 using VSTOContrib.Core.Wpf;
 using VSTOContrib.Outlook.RibbonFactory;
 using VSTOContrib.Core.Extensions;
+using stdole;
 
 namespace GithubForOutlook.Logic.Ribbons.MainExplorer
 {
@@ -28,6 +29,7 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
         }
 
         private Explorer explorer;
+
 
         public void Initialised(object context)
         {
@@ -127,13 +129,13 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
             }
         }
 
-        public Bitmap GetImage(IRibbonControl control)
+        public IPictureDisp GetImage(IRibbonControl control)
         {
             switch (control.Id)
             {
                 case "createTask":
                     {
-                        return new Bitmap(Properties.Resources.gtfo32x32);
+                        return base.GetPicture(Properties.Resources.gtfo32x32);
                     }
             }
             return null;

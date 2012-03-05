@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<customUI onLoad="Ribbon_Load" xmlns="http://schemas.microsoft.com/office/2006/01/customui">
+<customUI onLoad="Ribbon_Load" loadImage="GetImage" xmlns="http://schemas.microsoft.com/office/2006/01/customui">
   <ribbon>
     <tabs>
       <tab idMso="TabMail">
@@ -9,6 +9,7 @@
                   screentip="Create on Github"
                   size="large"
                   showImage="true"
+                  getImage="GetImage"
                   onAction="CreateIssue" 
                   getEnabled="MailItemSelected" />
           <button id="settings" label="Settings" onAction="ShowSettings" />

@@ -67,7 +67,7 @@
       <HintPath>..\packages\RestSharp.102.7\lib\net35\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -82,16 +82,20 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VSTOContrib.Core, Version=0.9.0.67, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VSTOContrib.Outlook.0.9.0.67\tools\net40\2010\VSTOContrib.Core.dll</HintPath>
+    <Reference Include="VSTOContrib.Core, Version=0.10.0.73, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\VSTOContrib.Outlook.0.10.0.73\tools\net40\2010\VSTOContrib.Core.dll</HintPath>
     </Reference>
-    <Reference Include="VSTOContrib.Extensions.Proxies">
+    <Reference Include="VSTOContrib.Extensions.Proxies, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\libs\VSTOContrib.Extensions.Proxies.dll</HintPath>
     </Reference>
-    <Reference Include="VSTOContrib.Outlook, Version=0.9.0.67, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VSTOContrib.Outlook.0.9.0.67\tools\net40\2010\VSTOContrib.Outlook.dll</HintPath>
+    <Reference Include="VSTOContrib.Outlook, Version=0.10.0.73, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\VSTOContrib.Outlook.0.10.0.73\tools\net40\2010\VSTOContrib.Outlook.dll</HintPath>
     </Reference>
-    <Reference Include="VSTOContrib.Outlook.Extensions.Proxies">
+    <Reference Include="VSTOContrib.Outlook.Extensions.Proxies, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\libs\VSTOContrib.Outlook.Extensions.Proxies.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
@@ -147,9 +151,11 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Ribbons\Email\GithubMailItem.xml" />
+    <EmbeddedResource Include="Ribbons\Email\GithubMailItem.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ribbons\MainExplorer\GithubExplorerRibbon.xml" />
-    <None Include="Resources\gtfo32x32.png" />
+    <EmbeddedResource Include="Resources\gtfo32x32.png" />
     <Content Include="VSTOContrib.GettingStarted.txt" />
   </ItemGroup>
   <ItemGroup />
