@@ -127,9 +127,6 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 
         public void GetOrganisationUsers(Repository repository)
         {
-            Users.Clear();
-            Users.Add(new User { Login = "No User", Name = "No User" });
-
             GithubRepository.GetCollaborators(repository.Owner.Login, repository.Name).ContinueWith(t =>
                                       {
                                           // this is a bullshit fix
@@ -156,7 +153,10 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 
         private void PopulateUsers(IEnumerable<User> result)
         {
-            foreach (var u in result)
+            Users.Clear();
+            Users.Add(new User { Login = "No User", Name = "No User" });
+
+            foreach (var u in result.OrderBy(o => o.Login))
             {
                 Users.Add(u);
             }
