@@ -138,8 +138,8 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
                         return base.GetPicture(Properties.Resources.gtfo32x32);
                     }
             }
-            return null;
 
+            return null;
         }
 
         public void Cleanup()
