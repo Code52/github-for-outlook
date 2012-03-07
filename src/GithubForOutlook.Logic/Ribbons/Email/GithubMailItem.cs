@@ -7,6 +7,7 @@ using VSTOContrib.Core.RibbonFactory;
 using VSTOContrib.Core.RibbonFactory.Interfaces;
 using VSTOContrib.Core.Wpf;
 using VSTOContrib.Outlook.RibbonFactory;
+using stdole;
 
 namespace GithubForOutlook.Logic.Ribbons.Email
 {
@@ -53,6 +54,19 @@ namespace GithubForOutlook.Logic.Ribbons.Email
                                         mailItem.Body);
 
             new GithubExplorerWindow(tasks).Show();
+        }
+
+        public IPictureDisp GetImage(IRibbonControl control)
+        {
+            switch (control.Id)
+            {
+                case "createTask":
+                    {
+                        return base.GetPicture(Properties.Resources.gtfo32x32);
+                    }
+            }
+         
+            return null;
         }
 
         public IRibbonUI RibbonUi { get; set; }

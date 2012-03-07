@@ -1,4 +1,5 @@
-﻿using GithubForOutlook.Logic.Modules.Settings;
+﻿using System.Windows.Input;
+using GithubForOutlook.Logic.Modules.Settings;
 
 namespace GithubForOutlook.Logic.Ribbons.Settings
 {
@@ -26,7 +27,8 @@ namespace GithubForOutlook.Logic.Ribbons.Settings
 
         private void OnDragMoveWindow(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            DragMove();
+            if (e.RightButton != MouseButtonState.Pressed && e.MiddleButton != MouseButtonState.Pressed && e.LeftButton == MouseButtonState.Pressed)
+                DragMove();
         }
     }
 }
