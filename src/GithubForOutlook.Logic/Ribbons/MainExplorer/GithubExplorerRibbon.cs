@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Globalization;
 using GithubForOutlook.Logic.Modules.Settings;
 using GithubForOutlook.Logic.Modules.Tasks;
+using GithubForOutlook.Logic.Ribbons.About;
 using GithubForOutlook.Logic.Ribbons.Settings;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Outlook;
@@ -72,6 +73,13 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
             var window = new GithubSettingsWindow(viewModel);
             window.Show();
         }
+
+        public void ShowAbout(IRibbonControl ribbonControl)
+        {
+            var window = new AboutWindow();
+            window.Show();
+        }
+
 
         public void CurrentViewChanged(object currentView)
         {
