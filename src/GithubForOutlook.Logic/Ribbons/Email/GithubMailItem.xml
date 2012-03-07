@@ -6,8 +6,8 @@
       <tab idMso="TabReadMessage">
         <group id="githubGroup" label="GitHub">
           <button id="createTask"
-            label="Create on Github"
-            screentip="Create on Github"
+            label="Create Issue"
+            screentip="Create Issue"
             size="large"
             showImage="true"
             getImage="GetImage"
