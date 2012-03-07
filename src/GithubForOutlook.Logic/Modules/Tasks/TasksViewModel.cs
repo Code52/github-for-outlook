@@ -262,7 +262,7 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 
             try
             {
-                var result = GithubRepository.CreateIssue(User.Login, SelectedProject.Name, Title, Body, assigned, milestone, selectedLabels).Result;
+                var result = GithubRepository.CreateIssue(SelectedProject.Owner.Login, SelectedProject.Name, Title, Body, assigned, milestone, selectedLabels).Result;
                 return ValidationResult<Issue>.Success.WithData(result);
             }
             catch (Exception ex)
