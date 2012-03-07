@@ -66,8 +66,12 @@
     <Reference Include="RestSharp">
       <HintPath>..\packages\RestSharp.102.7\lib\net35\RestSharp.dll</HintPath>
     </Reference>
+    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.0.6.0.1\lib\net40\System.Windows.Interactivity.dll</HintPath>
@@ -78,16 +82,20 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VSTOContrib.Core, Version=0.9.0.67, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VSTOContrib.Outlook.0.9.0.67\tools\net40\2010\VSTOContrib.Core.dll</HintPath>
+    <Reference Include="VSTOContrib.Core, Version=0.10.0.73, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\VSTOContrib.Outlook.0.10.0.73\tools\net40\2010\VSTOContrib.Core.dll</HintPath>
     </Reference>
-    <Reference Include="VSTOContrib.Extensions.Proxies">
+    <Reference Include="VSTOContrib.Extensions.Proxies, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\libs\VSTOContrib.Extensions.Proxies.dll</HintPath>
     </Reference>
-    <Reference Include="VSTOContrib.Outlook, Version=0.9.0.67, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VSTOContrib.Outlook.0.9.0.67\tools\net40\2010\VSTOContrib.Outlook.dll</HintPath>
+    <Reference Include="VSTOContrib.Outlook, Version=0.10.0.73, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\VSTOContrib.Outlook.0.10.0.73\tools\net40\2010\VSTOContrib.Outlook.dll</HintPath>
     </Reference>
-    <Reference Include="VSTOContrib.Outlook.Extensions.Proxies">
+    <Reference Include="VSTOContrib.Outlook.Extensions.Proxies, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\libs\VSTOContrib.Outlook.Extensions.Proxies.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
@@ -106,6 +114,11 @@
     <Compile Include="Modules\Settings\SettingsViewModel.cs" />
     <Compile Include="Modules\Tasks\TasksViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Repositories\GithubRepository.cs" />
     <Compile Include="Repositories\Interfaces\IGithubRepository.cs" />
     <Compile Include="Repositories\Interfaces\IOutlookRepository.cs" />
@@ -134,8 +147,15 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Ribbons\Email\GithubMailItem.xml" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ribbons\Email\GithubMailItem.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ribbons\MainExplorer\GithubExplorerRibbon.xml" />
+    <EmbeddedResource Include="Resources\gtfo32x32.png" />
     <Content Include="VSTOContrib.GettingStarted.txt" />
   </ItemGroup>
   <ItemGroup />
