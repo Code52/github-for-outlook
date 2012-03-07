@@ -13,6 +13,7 @@
                   onAction="CreateIssue" 
                   getEnabled="MailItemSelected" />
           <button id="settings" label="Settings" onAction="ShowSettings" />
+          <button id="about" label="About" onAction="ShowAbout" />
         </group>
       </tab>
     </tabs>
