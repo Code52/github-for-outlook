@@ -123,6 +123,9 @@
     <Compile Include="Repositories\Interfaces\IGithubRepository.cs" />
     <Compile Include="Repositories\Interfaces\IOutlookRepository.cs" />
     <Compile Include="Repositories\OutlookDispatchingRepository.cs" />
+    <Compile Include="Ribbons\About\AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Ribbons\MainExplorer\GithubExplorerRibbon.cs" />
     <Compile Include="Ribbons\MainExplorer\GithubExplorerWindow.xaml.cs">
       <DependentUpon>GithubExplorerWindow.xaml</DependentUpon>
@@ -137,6 +140,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Ribbons\About\AboutWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Ribbons\MainExplorer\GithubExplorerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -156,6 +163,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Ribbons\MainExplorer\GithubExplorerRibbon.xml" />
     <EmbeddedResource Include="Resources\gtfo32x32.png" />
+    <Resource Include="Resources\gtfo.png" />
     <Content Include="VSTOContrib.GettingStarted.txt" />
   </ItemGroup>
   <ItemGroup />
