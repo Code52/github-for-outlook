@@ -102,8 +102,8 @@
                     </Style.Triggers>
                 </Style>
             </StackPanel.Style>
-            <TextBlock FontSize="14" HorizontalAlignment="Center" Text="No repositories found." Foreground="Black" />
-            <TextBlock FontSize="14" HorizontalAlignment="Center" Text="Please check your settings are correct." Foreground="Black" />
+            <TextBlock FontSize="14" HorizontalAlignment="Center" Text="{Binding RepositoryText1}" Foreground="Black" />
+            <TextBlock FontSize="14" HorizontalAlignment="Center" Text="{Binding RepositoryText2}" Foreground="Black" />
         </StackPanel>
 
         <Grid Grid.Column="1" Grid.Row="1"  Margin="37,0,3,0">
