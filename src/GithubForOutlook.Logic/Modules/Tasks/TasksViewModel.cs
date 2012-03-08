@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using GithubForOutlook.Logic.Helpers;
 using GithubForOutlook.Logic.Models;
 using GithubForOutlook.Logic.Repositories.Interfaces;
 using NGitHub.Models;
@@ -38,8 +39,26 @@ namespace GithubForOutlook.Logic.Modules.Tasks
 
         public IGithubRepository GithubRepository { get; private set; }
 
+        [NotifyProperty(AlsoNotifyFor = new[] { "RepositoryText1", "RepositoryText2" })]
+        public bool SearchingForRepositories { get; set; }
+        
+        public string RepositoryText1
+        {
+            get
+            {
+                return SearchingForRepositories ? "Finding repositories..." : "No repositories found.";
+            }
+        }
+
+        public string RepositoryText2
+        {
+            get { return SearchingForRepositories ? "" : "Please check your settings are correct."; }
+        }
+
         public void Login()
         {
+            SearchingForRepositories = true;
+
             try
             {
                 if (User == null)
@@ -91,6 +110,8 @@ namespace GithubForOutlook.Logic.Modules.Tasks
                 // this is a bullshit fix
                 ExecuteOnMainThread(() => PopulateCollections(task.Result));
             }
+
+            SearchingForRepositories = false;
         }
 
         private void ExecuteOnMainThread(Action action)
