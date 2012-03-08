@@ -105,6 +105,7 @@
     <Compile Include="Analects\SettingService\ISettingsService.cs" />
     <Compile Include="Analects\SettingService\SettingsService.cs" />
     <Compile Include="GithubTaskAdapter.cs" />
+    <Compile Include="Helpers\NotifyProperty.cs" />
     <Compile Include="Helpers\ValidationResult.cs" />
     <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Models\GithubIssue.cs" />
@@ -176,8 +177,8 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <UsingTask TaskName="NotifyPropertyWeaverMsBuildTask.WeavingTask" AssemblyFile="$(SolutionDir)Tools\NotifyPropertyWeaverMsBuildTask.dll" />
   <Target Name="AfterCompile">
     <NotifyPropertyWeaverMsBuildTask.WeavingTask />
   </Target>
+  <UsingTask TaskName="NotifyPropertyWeaverMsBuildTask.WeavingTask" AssemblyFile="$(SolutionDir)Tools\NotifyPropertyWeaverMsBuildTask.dll" />
 </Project>

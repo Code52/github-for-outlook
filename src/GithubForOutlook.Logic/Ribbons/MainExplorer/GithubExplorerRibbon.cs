@@ -49,7 +49,11 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
 
             var settingsViewModel = getSettingsViewModel();
 
-            if (settingsViewModel.User == null || settingsViewModel.User.Name == null || tasks.User == null  || settingsViewModel.User.Name != tasks.User.Login)
+            if (settingsViewModel.User == null 
+                || settingsViewModel.User.Name == null 
+                || tasks.User == null  
+                || settingsViewModel.User.Name != tasks.User.Login
+                )
                 tasks.User = null;
 
             tasks.Login();
@@ -68,6 +72,8 @@ namespace GithubForOutlook.Logic.Ribbons.MainExplorer
 
         public void ShowSettings(IRibbonControl ribbonControl)
         {
+            tasks.User = null; // Set to null so if password changes it has to relogin.
+
             var viewModel = getSettingsViewModel();
 
             var window = new GithubSettingsWindow(viewModel);
