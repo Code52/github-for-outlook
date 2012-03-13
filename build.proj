@@ -1,4 +1,4 @@
-<Project ToolsVersion="4.0" DefaultTargets="Test" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Package" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   
   <UsingTask AssemblyFile=".\tools\xunit\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit" />
 
@@ -24,8 +24,9 @@
 
   <Target Name="Package" DependsOnTargets="Test">
 
-  	
-  </Target>
+    <MSBuild Projects="./src/GithubForOutlook.sln" Properties="Configuration=$(Configuration)" Targets="Publish" />
+    <!---->
 
+  </Target>
 
 </Project>
