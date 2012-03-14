@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 11
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GithubForOutlook", "GithubForOutlook\GithubForOutlook.csproj", "{C1BDCC5D-70DE-448C-9234-5C55FD1E861E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GithubForOutlook.Logic", "GithubForOutlook.Logic\GithubForOutlook.Logic.csproj", "{8D5DDB2B-00BB-4E35-B852-8EDD0DBD7ED0}"
@@ -9,6 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GithubForOutlook.Tests", "G
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6A99D177-CAAE-464C-97E8-E74D91B3CF41}"
 	ProjectSection(SolutionItems) = preProject
+		..\README.md = ..\README.md
+		..\build.cmd = ..\build.cmd
+		..\build.proj = ..\build.proj
 		Readme-First.txt = Readme-First.txt
 	EndProjectSection
 EndProject
@@ -18,10 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C1BDCC5D-70DE-448C-9234-5C55FD1E861E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1BDCC5D-70DE-448C-9234-5C55FD1E861E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C1BDCC5D-70DE-448C-9234-5C55FD1E861E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1BDCC5D-70DE-448C-9234-5C55FD1E861E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8D5DDB2B-00BB-4E35-B852-8EDD0DBD7ED0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8D5DDB2B-00BB-4E35-B852-8EDD0DBD7ED0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D5DDB2B-00BB-4E35-B852-8EDD0DBD7ED0}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -30,6 +29,10 @@ Global
 		{B29EEFDE-DC59-441A-A3C3-EA9A78FFB731}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B29EEFDE-DC59-441A-A3C3-EA9A78FFB731}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B29EEFDE-DC59-441A-A3C3-EA9A78FFB731}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1BDCC5D-70DE-448C-9234-5C55FD1E861E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1BDCC5D-70DE-448C-9234-5C55FD1E861E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1BDCC5D-70DE-448C-9234-5C55FD1E861E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1BDCC5D-70DE-448C-9234-5C55FD1E861E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

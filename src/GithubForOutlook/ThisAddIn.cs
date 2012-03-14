@@ -2,6 +2,7 @@
 using System.Windows;
 using GithubForOutlook.Logic;
 using Microsoft.Office.Core;
+using VSTOContrib.Core;
 using VSTOContrib.Core.RibbonFactory;
 using VSTOContrib.Core.RibbonFactory.Interfaces;
 using VSTOContrib.Outlook.RibbonFactory;
@@ -16,6 +17,15 @@ namespace GithubForOutlook
         {
             if (System.Windows.Application.Current == null)
                 new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
+
+            //Check for updates
+            new VstoClickOnceUpdater()
+                .CheckForUpdateAsync(
+                    r =>
+                    {
+                        if (r.Updated)
+                            MessageBox.Show(@"Github For Outlook add-in updated");
+                    });
         }
 
         private void ThisAddInShutdown(object sender, EventArgs e)
