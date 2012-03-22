@@ -1,0 +1,16 @@
+markdown: rdiscount
+appname: 'Github Tasks For Outlook'
+appslogan: ', the easy way to turn emails into issues'
+username: Code52
+reponame: github-tasks-for-outlook
+accent: 000000
+darkaccent: cacaca
+description: 
+
+#feature1title: 'Create new Issues'
+#feature2title: 'No Effort Required'
+#feature3title: 'More to come'
+
+#feature1desc: 'Turn your emails into issues against your Github Repositories directly from Outlook'
+#feature2desc: 'Once you have linked to your account we fetch your repositories, users, milestones and labels.'
+#feature3desc: 'It's an open source project, so you can always add yourself - but we have more planned to add in!''
