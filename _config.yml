@@ -1,6 +1,6 @@
 markdown: rdiscount
 appname: 'Github Tasks For Outlook'
-appslogan: ', emails into issues'
+appslogan: 'Emails into issues'
 username: Code52
 reponame: github-tasks-for-outlook
 accent: "000000"
