@@ -1,13 +1,13 @@
 markdown: rdiscount
 appname: 'Github Tasks For Outlook'
-appslogan: 'Emails into issues'
+appslogan: 'The easy way to turn emails into issues'
 username: Code52
 reponame: github-tasks-for-outlook
 accent: "000000"
 darkaccent: cacaca
 description: 
 
-feature1title: 'Create Issues Easily'
+feature1title: 'Create Issues Simply'
 feature2title: 'We do the Heavy Lifting'
 feature3title: 'More to Come'
 
